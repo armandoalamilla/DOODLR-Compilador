@@ -25,18 +25,7 @@ actual_scope = 'global'
 dir_func[actual_scope] = { 'type' : 'VOID', 'scope' : {}, 'numParams' : 0}
 
 # Declaración del cubo semántico
-sem_cube = {'INT' : { 
-                      'INT' : { '+': 'INT','-': 'INT','/': 'FLOAT', '*': 'INT','%': 'INT', '<': 'BOOL','>': 'BOOL','<=': 'BOOL','>=': 'BOOL','!=': 'BOOL','==': 'BOOL','=': 'INT'},
-                      'FLOAT': {'+': 'FLOAT','-': 'FLOAT','/': 'FLOAT','*': 'FLOAT','<': 'BOOL','>': 'BOOL','<=': 'BOOL','>=': 'BOOL','!=': 'BOOL','==': 'BOOL','=': 'INT'}
-                    },
-            'FLOT' : {
-                      'INT' : {'+': 'FLOAT','-': 'FLOAT','/': 'FLOAT','*': 'FLOAT','<': 'BOOL','>': 'BOOL','<=': 'BOOL','>=': 'BOOL','!=': 'BOOL','==': 'BOOL','=': 'FLOAT'},
-                      'FLOAT': {'+': 'FLOAT','-': 'FLOAT','/': 'FLOAT','*': 'FLOAT','<': 'BOOL','>': 'BOOL','<=': 'BOOL','>=': 'BOOL','!=': 'BOOL','==': 'BOOL','=': 'FLOAT'}
-                     },
-            'BOOL' : {
-                      'BOOL' : {'AND' : 'BOOL', 'OR' : 'BOOL','=' : 'BOOL'}
-                     }
-            }
+
 
 ######## Scanner ##########
 
