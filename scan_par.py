@@ -7,7 +7,9 @@ import sys
 
 # Inicialización de variables, diccionarios, listas.
 aprobado = true;
+
 dir_func = {}
+
 pOper = []
 pType = []
 pilaO = []
@@ -20,8 +22,16 @@ actual_scope = 'global'
 # Directorio de funciones vacio
 dir_func[actual_scope] = { 'type' : 'VOID', 'scope' : {}, 'numParams' : 0}
 
-# Declaración del cubo semántico
+# Validación de semántica
+def semantic_check(l_OP_type,R_OP_type,oper):
+    if L_OP_type in sem_cube:
+        if R_OP_type in sem_cube[L_OP_type]:
+            if oper in sem_cube[L_OP_type][R_OP_type]:
+                return sem_cube[L_OP_type][R_OP_type][oper]
+    return 'error'
 
+
+# Declaración del cubo semántico
 cubo_semantico = {'INT' :   { 'INT' : { '+': 'INT',
                                     '-': 'INT',
                                     '/': 'FLOAT',
@@ -109,6 +119,7 @@ reserved = {
  'FLOAT'   : 'FLOAT',
  'BOOL'    : 'BOOL',
  'STRING'  : 'STRING',
+ 'VOID'    : 'VOID',
  'AND'     : 'AND',
  'OR'      : 'OR',
  'NOT'     : 'NOT',
