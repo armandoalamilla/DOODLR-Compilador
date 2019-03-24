@@ -221,7 +221,10 @@ def p_vars(p):
     '''vars : VAR ids '''
 
 def p_ids(p):
-    '''ids : type ID arr_mat  '''
+    'ids : type ID arr_mat  '
+    #print(actual_scope)
+    dir_func[actual_scope]['scope'][p[2]] = {'type' : p[1]}
+    #print(dir_func.get(actual_scope))
 
 def p_arr_mat(p):
     '''arr_mat : '[' CTE_I ']'
