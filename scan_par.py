@@ -6,15 +6,22 @@ import ply.yacc as yacc
 import sys
 
 # Inicialización de variables, diccionarios, listas.
-aprobado = true;
-
+aprobado = True
 dir_func = {}
-
 pOper = []
 pType = []
 pilaO = []
 quad = []
-count = 0
+pJumps = []
+pIterator = []
+pReturnTo = []
+pFunc = []
+pVar = []
+pArr =[]
+contQuads = 0
+contParam = 0
+funcToCall = ''
+currentQuad = 0
 
 # Scope global
 actual_scope = 'global'
@@ -209,13 +216,17 @@ def p_more_funcs(p):
                   | func more_funcs
                   | empty '''
 
-def p_main(p):
-    '''main : MAIN '{' more_vars more_bloques '}' '''
-
 def p_more_bloques(p):
     '''more_bloques : bloque
                     | bloque more_bloques 
                     | empty '''
+
+def p_main(p):
+    'main : MAIN '{' more_vars more_bloques '}' '
+    actual_scope = 'main'
+    dir_func[p[3]] = {'type' : 'void', 'scope' : {}}
+    #print(dir_func.get('move'))
+
 
 def p_vars(p):
     '''vars : VAR ids '''
@@ -239,7 +250,10 @@ def p_type(p):
     p[0] = p[1]
 
 def p_func(p):
-    '''func : FUNCTION func_type ID '(' more_ids ')' '{' more_vars more_bloques '}' '''
+    'func : FUNCTION func_type ID '(' more_ids ')' '{' more_vars more_bloques '}' '
+    global actual_scope
+    actual_scope = p[3]
+    dir_func[p[3]] = { 'type' : p[2], 'scope' : {}}
 
 def p_more_ids(p):
     '''more_ids : ids 
@@ -249,6 +263,7 @@ def p_more_ids(p):
 def p_func_type(p):
     '''func_type : type
                  | VOID '''
+    p[0] = p[1]
 
 def p_bloque(p):
     '''bloque : assignation
