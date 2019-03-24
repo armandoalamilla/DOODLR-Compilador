@@ -11,12 +11,8 @@ dir_func = {}
 pOper = []
 pType = []
 pilaO = []
-pJumps = []
-pIterator = []
-pReturnTo = []
-pFunc = []
-pVar = []
-pArr =[]
+quad = []
+count = 0
 
 # Scope global
 actual_scope = 'global'
@@ -185,7 +181,7 @@ def p_more_ids(p):
 
 def p_func_type(p):
     '''func_type : type
-                 | void '''
+                 | VOID '''
 
 def p_bloque(p):
     '''bloque : assignation
