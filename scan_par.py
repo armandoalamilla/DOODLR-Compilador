@@ -236,6 +236,7 @@ def p_type(p):
             | FLOAT
             | BOOL
             | STRING '''
+    p[0] = p[1]
 
 def p_func(p):
     '''func : FUNCTION func_type ID '(' more_ids ')' '{' more_vars more_bloques '}' '''
