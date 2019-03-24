@@ -1,13 +1,49 @@
+## Eduardo Benitez
+## Armando Aguiar
+
 import ply.lex as lex
 import ply.yacc as yacc
 import sys
 
+# Inicialización de variables, diccionarios, listas.
+aprobado = true;
+dir_func = {}
+pOper = []
+pType = []
+pilaO = []
+pJumps = []
+pIterator = []
+pReturnTo = []
+pFunc = []
+pVar = []
+pArr =[]
+
+# Scope global
+actual_scope = 'global'
+
+# Directorio de funciones vacio
+dir_func[actual_scope] = { 'type' : 'VOID', 'scope' : {}, 'numParams' : 0}
+
+# Declaración del cubo semántico
+sem_cube = {'INT' : { 
+                      'INT' : { '+': 'INT','-': 'INT','/': 'FLOAT', '*': 'INT','%': 'INT', '<': 'BOOL','>': 'BOOL','<=': 'BOOL','>=': 'BOOL','!=': 'BOOL','==': 'BOOL','=': 'INT'},
+                      'FLOAT': {'+': 'FLOAT','-': 'FLOAT','/': 'FLOAT','*': 'FLOAT','<': 'BOOL','>': 'BOOL','<=': 'BOOL','>=': 'BOOL','!=': 'BOOL','==': 'BOOL','=': 'INT'}
+                    },
+            'FLOT' : {
+                      'INT' : {'+': 'FLOAT','-': 'FLOAT','/': 'FLOAT','*': 'FLOAT','<': 'BOOL','>': 'BOOL','<=': 'BOOL','>=': 'BOOL','!=': 'BOOL','==': 'BOOL','=': 'FLOAT'},
+                      'FLOAT': {'+': 'FLOAT','-': 'FLOAT','/': 'FLOAT','*': 'FLOAT','<': 'BOOL','>': 'BOOL','<=': 'BOOL','>=': 'BOOL','!=': 'BOOL','==': 'BOOL','=': 'FLOAT'}
+                     },
+            'BOOL' : {
+                      'BOOL' : {'AND' : 'BOOL', 'OR' : 'BOOL','=' : 'BOOL'}
+                     }
+            }
 
 ######## Scanner ##########
 
 literals = "{}()<>=;:,+-*/%&|^"
 
 reserved = {
+
  'PROGRAM' : 'PROGRAM',
  'FUNCTION': 'FUNCTION',
  'RETURN'  : 'RETURN',
@@ -19,6 +55,9 @@ reserved = {
  'calculaModa'      : 'calculaModa',
  'calculaMediana'   : 'calculaMediana',
  'calculaMedia'     : 'calculaMedia',
+ 'calculaPoisson'   : 'calculaPoisson',
+ 'calculaBinomial'  : 'calculaBinomial',
+ 'calculaNormal'    : 'calculaNormal',
  
 
  'IF'      : 'IF',
@@ -83,9 +122,12 @@ def t_CTES(t):
     return t
 
 def t_error(t):
+    global aprobado
+    aprobado = FALSE
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)    
 
+#Construye Lexer
 lexer = lex.lex()
 
 
@@ -198,7 +240,10 @@ def p_func_pred(p):
                  | prediceResultado '(' exp ')'
                  | calculaModa '(' exp ')'
                  | calculaMediana '(' exp ')'
-                 | calculaMedia '(' exp ')' '''
+                 | calculaMedia '(' exp ')' 
+                 | calculaPoisson '(' exp ')'
+                 | calculaBinomial '(' exp ')'
+                 | calculaNormal '(' exp ')' '''
 
 def p_mega_exp(p):
     '''mega_exp : opt_not super_exp
@@ -262,7 +307,14 @@ def p_other(p):
 # with open(fName, 'r') as myfile:
 #     s=myfile.read().replace('\n', '')
 
-# parser = yacc.yacc()
+# Construye Parser
+parser = yacc.yacc()
 
-# parser.parse(s)
+parser.parse(s)
 
+if aprobado == True:
+    print("Archivo aprobado")
+    sys.exit()
+else: 
+    print("Archivo no aprobado")
+    sys.exit()
