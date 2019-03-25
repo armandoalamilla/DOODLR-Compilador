@@ -350,9 +350,9 @@ def p_mega_exp(p):
                 | opt_not super_exp log_op mega_exp '''
     top = top_pOper()
     if top = 'OR' or top =='AND' or top == 'NOT':
-      rightOperand = pop_pilaO()
-      R_OP_type = pop_pType()
-      operator = pop_pOper()
+      rightOperand = pilaO.pop()
+      R_OP_type = pType.pop()
+      operator = pOper.pop()
       if operator == 'NOT':
         if R_OP_type == 'BOOL':
           nextT = nextTemp(R_OP_type)
@@ -363,8 +363,8 @@ def p_mega_exp(p):
           print('Error de tipo en negacion')
           sys.exit()
       else:
-        leftOperand = pop_pilaO()
-        l_OP_type = pop_pType()
+        leftOperand = pilaO.pop()
+        l_OP_type = pType.pop()
         result_type = semantic_check(l_OP_type, R_OP_type, operator)
         if result_type != 'error':
           nextT = nextTemp(result_type)
@@ -397,11 +397,11 @@ def p_super_exp(p):
     top = top_pOper()
 
     if top == '>' or top == '<' or top == '>=' or top =='<=' or top == '!=' or top == '==':
-      rightOperand = pop_pilaO()
-      R_OP_type = pop_pType()
-      leftOperand = pop_pilaO()
-      l_OP_type = pop_pType()
-      operator = pop_pOper()
+      rightOperand = pilaO.pop()
+      R_OP_type = pType.pop()
+      leftOperand = pilaO.pop()
+      l_OP_type = pType.pop()
+      operator = pOper.pop()
       result_type = semantic_check(l_OP_type,r_OP_type,operator)
       if result_type != 'error':
         nextT = nextTemp(result_type)
@@ -426,11 +426,11 @@ def p_exp(p):
 
     top = top_pOper()
     if top == '+' or top == '-':
-      rightOperand = pop_pilaO()
-      r_OP_type =pop_pType()
-      leftOperand = pop_pilaO()
-      l_OP_type = pop_pType()
-      operator = pop_pOper()
+      rightOperand = pilaO.pop()
+      r_OP_type =pType´.pop()
+      leftOperand = pilaO.pop()
+      l_OP_type = pType.pop()
+      operator = pOper.pop()
       result_type = semantic_check(l_OP_type,r_OP_type,operator)
       if result_type != 'error':
         nextT = nextTemp(result_type)
