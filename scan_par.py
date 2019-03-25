@@ -199,6 +199,39 @@ lexer = lex.lex()
 ##################################################################################################################################
 ########## Parser ##########
 
+# Funciones para regresar el tope de 
+# diferentes pilas para su uso
+def top_pOper():
+    if (len(pOper) > 0):
+        temp = pop_pOper()
+        add_pOper(temp)
+        return temp
+    else:
+        return -1
+
+
+def top_pIterator():
+  if (len(pIterator) > 0):
+    temp = pop_pIterator()
+    add_pIterator(temp)
+    return temp
+  else:
+    return -1
+def top_pFunc():
+    if (len(pFunc) > 0):
+        temp = pop_pFunc()
+        add_pFunc(temp)
+        return temp
+    else:
+        return -1
+def top_pVar():
+    if (len(pVar) > 0):
+        temp = pop_pVar()
+        add_pVar(temp)
+        return temp
+    else:
+        return -1
+
 def p_empty(p):
     '''empty : '''
     pass
@@ -315,6 +348,39 @@ def p_func_pred(p):
 def p_mega_exp(p):
     '''mega_exp : opt_not super_exp
                 | opt_not super_exp log_op mega_exp '''
+    top = top_pOper()
+    if top = 'OR' or top =='AND' or top == 'NOT':
+      rightOperand = pop_pilaO()
+      R_OP_type = pop_pType()
+      operator = pop_pOper()
+      if operator == 'NOT':
+        if R_OP_type == 'BOOL':
+          nextT = nextTemp(R_OP_type)
+          add_quad(operator,'',rightOperand,'(' + str(nextT) + ')')
+          add_pilaO('(' + str(nextT) + ')')
+          add_pType('BOOL')
+        else:
+          print('Error de tipo en negacion')
+          sys.exit()
+      else:
+        leftOperand = pop_pilaO()
+        l_OP_type = pop_pType()
+        result_type = semantic_check(l_OP_type, R_OP_type, operator)
+        if result_type != 'error':
+          nextT = nextTemp(result_type)
+          add_quad(operator,leftOperand,rightOperand,'(' + str(nextT) + ')')
+          add_pilaO('(' + str(nextT) + ')')
+          add_pType(result_type)
+        else:
+          print('Error de tipo en una comparacion')
+          sys.exit()
+
+
+
+
+
+
+
 
 def p_log_op(p):
     '''log_op : AND
@@ -328,6 +394,24 @@ def p_opt_not(p):
 def p_super_exp(p):
     '''super_exp : exp 
                  | exp rel_op super_exp '''
+    top = top_pOper()
+
+    if top == '>' or top == '<' or top == '>=' or top =='<=' or top == '!=' or top == '==':
+      rightOperand = pop_pilaO()
+      R_OP_type = pop_pType()
+      leftOperand = pop_pilaO()
+      l_OP_type = pop_pType()
+      operator = pop_pOper()
+      result_type = semantic_check(l_OP_type,r_OP_type,operator)
+      if result_type != 'error':
+        nextT = nextTemp(result_type)
+        add_quad(operator,leftOperand,rightOperand,'(' + str(nextT) + ')')
+        add_pilaO('(' + str(nextT) + ')')
+        add_pType(result_type)
+      else:
+        print('Error de tipo en una comparacion')
+        sys.exit()
+
 
 def p_rel_op(p):
     '''rel_op : LE
@@ -339,6 +423,17 @@ def p_exp(p):
     '''exp : termino
            | termino '+' exp
            | termino '-' exp '''
+
+    top = top_pOper()
+    if top == '+' or top == '-':
+      rightOperand = pop_pilaO()
+      r_OP_type =pop_pType()
+      leftOperand = pop_pilaO()
+      l_OP_type = pop_pType()
+      operator = pop_pOper()
+
+
+
 
 def p_termino(p):
     '''termino : factor
