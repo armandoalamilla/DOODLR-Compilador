@@ -29,6 +29,19 @@ actual_scope = 'global'
 # Directorio de funciones vacio
 dir_func[actual_scope] = { 'type' : 'VOID', 'scope' : {}, 'numParams' : 0}
 
+# Agrega al diccionario de cuadruplos el cuadruplo que recibe
+def add_quad(operator,leftOperand,rightOperand,result):
+  quad.append({'operator':operator,'leftOperand':leftOperand,'rightOperand':rightOperand,'result':result})
+  global contQuads
+  contQuads = contQuads + 1
+
+add_quad('GOTO', '','','')
+
+# Actualiza las casillas que se agregan en blanco a la lista de cuadruplos
+def updateQuad(i, llave, val):
+  (quad[i])[llave] = val
+
+
 # Validación de semántica
 def semantic_check(l_OP_type,R_OP_type,oper):
     if L_OP_type in sem_cube:
@@ -36,6 +49,14 @@ def semantic_check(l_OP_type,R_OP_type,oper):
             if oper in sem_cube[L_OP_type][R_OP_type]:
                 return sem_cube[L_OP_type][R_OP_type][oper]
     return 'error'
+
+# Funcion auxiliar que revisa si lo que se recibe es un numero
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
 
 
 # Declaración del cubo semántico
@@ -206,41 +227,20 @@ def p_empty(p):
 def p_programa(p):
     '''programa : PROGRAM '{' more_vars more_funcs main '}' '''
 
-def p_more_vars(p):
-    '''more_vars : vars 
-                 | vars more_vars
-                 | empty '''
-
-def p_more_funcs(p):
-    '''more_funcs : func
-                  | func more_funcs
-                  | empty '''
-
-def p_more_bloques(p):
-    '''more_bloques : bloque
-                    | bloque more_bloques 
-                    | empty '''
-
-def p_main(p):
-    'main : MAIN '{' more_vars more_bloques '}' '
-    actual_scope = 'main'
-    dir_func[p[3]] = {'type' : 'void', 'scope' : {}}
-    #print(dir_func.get('move'))
-
 
 def p_vars(p):
     '''vars : VAR ids '''
 
 def p_ids(p):
-    'ids : type ID arr_mat  '
+    'ids : type ID index'
     #print(actual_scope)
     dir_func[actual_scope]['scope'][p[2]] = {'type' : p[1]}
     #print(dir_func.get(actual_scope))
 
-def p_arr_mat(p):
-    '''arr_mat : '[' CTE_I ']'
-               | '[' CTE_I ']' '[' CTE_I ']'
-               | empty '''
+def p_index(p):
+    '''index : '[' CTE_I ']'
+             | '[' CTE_I ']' '[' CTE_I ']'
+             | empty '''
 
 def p_type(p):
     '''type : INT
@@ -249,11 +249,42 @@ def p_type(p):
             | STRING '''
     p[0] = p[1]
 
+
+
+### Revisar ###########################################
+ 
 def p_func(p):
-    'func : FUNCTION func_type ID '(' more_ids ')' '{' more_vars more_bloques '}' '
-    global actual_scope
-    actual_scope = p[3]
-    dir_func[p[3]] = { 'type' : p[2], 'scope' : {}}
+  'func : func1 func2'
+
+def p_func1(p):
+  'func1 : func1_1 func1_2'
+
+
+def p_func1_1(p):
+  '''func1_1 : FUNCTION func_type ID '(' '''
+  if not p[3] in dir_func:
+      global actual_scope
+    
+      if p[2] != 'VOID':
+          dir_func['global']['scope'][p[3]] = {'type' : p[2]}
+          
+      actual_scope = p[3]
+      dir_func[p[3]] = { 'type' : p[2], 'scope' : {}, 'numParams' : 0, 'quadStart' : contQuads }
+  else:
+      print("Funcion " + p[3] +" ya declarada")
+      sys.exit()
+
+def p_func1_2(p):
+  '''func1_2 : more_ids ')' '{' '''
+
+def p_func2(p):
+  '''func2 : more_vars more_bloques '}' '''
+  add_quad('ENDPROC','','','')
+
+### Revisar #######################################
+
+
+
 
 def p_more_ids(p):
     '''more_ids : ids 
@@ -272,16 +303,56 @@ def p_bloque(p):
               | return
               | lecture
               | writing
-              | call 
-              | func_pred '''
+              | call  '''
+
+def p_more_vars(p):
+    '''more_vars : vars 
+                 | vars more_vars
+                 | empty '''
+
+def p_more_funcs(p):
+    '''more_funcs : func
+                  | func more_funcs
+                  | empty '''
+
+def p_more_bloques(p):
+    '''more_bloques : bloque
+                    | bloque more_bloques 
+                    | empty '''
 
 def p_assignation(p):
-    '''assignation : ID other_arr_mat '=' mega_exp '''
+    'assignation : assignTo '=' mega_exp'
+    myVar = p[1]
+    rightOperand = pilaO.pop()
+    R_OP_type = pType.pop()
 
-def p_other_arr_mat(p):
-    '''other_arr_mat : '[' exp ']'
-                     | '[' exp ']' '[' exp ']'
-                     | empty '''
+    try:
+        varscope = dir_func[actual_scope]['scope'][myVar]
+    except KeyError:
+        varscope = dir_func['global']['scope'][myVar]
+        result_check = semantic_check(varscope.get('type'),R_OP_type,'=')
+        if result_check != 'error':
+          add_quad('=','',rightOperand,myVar)
+        else:
+          print("Error de tipos al asignar")
+          sys.exit()
+    else:
+        result_check = semantic_check(varscope.get('type'),R_OP_type,'=')
+        if result_check != 'error':
+          add_quad('=','',rightOperand,myVar)
+        else:
+          print("Error de tipos al asignar")
+          sys.exit()
+
+
+def p_assignTo(p):
+  '''assignTo : ID arrayIndex'''
+  p[0] = p[1]
+
+def p_other_index(p):
+    '''other_index : '[' exp ']'
+                   | '[' exp ']' '[' exp ']'
+                   | empty '''
    
 def p_loop(p):
     '''loop : REPEAT '(' exp ')' '{' more_bloques '}' '''
@@ -290,17 +361,60 @@ def p_cond(p):
     '''cond : IF '(' mega_exp ')' '{' more_bloques '}'
             | IF '(' mega_exp ')' '{' more_bloques '}' ELSE '{' more_bloques '}' '''
 
+
+def p_cond(p):
+  'cond : cond1 cond2'
+
+
+def p_cond1(p):
+  '''cond1 : IF '(' mega_exp ')' '{' '''
+  exp_type = pType.pop()
+  if exp_type == 'BOOL':
+    global contQuads
+    resultado = pilaO.pop()
+    add_quad('GOTOF', resultado, '', '')
+    pJumps.append(contQuads - 1)
+  else:
+    print('Error de tipo en IF')
+    sys.exit()
+
+def p_cond2(p):
+  '''cond2 : more_bloques '}' maybe_else'''
+  fin = pJumps.pop()
+  global contQuads
+  updateQuad(fin,'result',contQuads)
+
+def p_maybe_else(p):
+  '''maybe_else : check_else do_else 
+                | empty'''
+  
+def p_checkElse(p):
+  '''check_else : ELSE '{' '''
+  add_quad('GOTO','','','')
+  falso = pJumps.pop()
+  global contQuads
+  pJumps.append(contQuads - 1)
+  updateQuad(falso,'result',contQuads)
+
+def p_doElse(p):
+  '''doElse : more_bloques '}' '''
+
 def p_return(p):
-    '''return : RETURN exp '''
+    '''return : RETURN mega_exp '''
+    rightOperand = pilaO.pop()
+    R_OP_type = pType.pop()
+    result_type = semantic_check(dir_func[actual_scope].get('type'),R_OP_type,'=')
+    if result_type != 'error':
+        add_quad('RET','',rightOperand,'')
+    else:
+        print('Error de tipo al retornar en la funcion ' + actual_scope)
+    sys.exit()
 
 def p_lecture(p):
     '''lecture : READ ARR ID arr_mat '''
 
 def p_writing(p):
     '''writing : PRINT '(' mega_exp ')' '''
-
-def p_call(p):
-    '''call : ID '(' exp ')' '''
 
 def p_func_pred(p):
     '''func_pred : calculaRegresion '(' exp ')'
@@ -311,6 +425,36 @@ def p_func_pred(p):
                  | calculaPoisson '(' exp ')'
                  | calculaBinomial '(' exp ')'
                  | calculaNormal '(' exp ')' '''
+
+def p_call(p):
+    '''call : call_1 call_2 
+            | func_pred '''
+
+
+def p_call_1(p):
+  '''call_1 : ID '(' '''
+  if p[1] in dir_func:
+    add_quad('ERA','',p[1],'')
+    global funcToCall
+    funcToCall = p[1]
+  else:
+    print('Error la funcion ' + p[1] + ' no existe')
+    sys.exit()  
+
+def p_call_2(p):
+  '''call_2 : exp ')' '''
+  global contParam
+  if contParam == dir_func[funcToCall].get('numParams'):
+    add_quad('GOSUB',funcToCall,'','')
+    if dir_func[funcToCall].get('type') != 'VOID':
+      nextT = nextTemp(dir_func[funcToCall].get('type'))
+      add_quad('=','',funcToCall,'(' + str(nextT) + ')') 
+      pilaO.append('(' + str(nextT) + ')')
+      pType.append(dir_func[funcToCall].get('type'))
+    contParam = 0
+  else:
+    print('Error en el numero de parametros de ' + funcToCall)
+    sys.exit()
 
 def p_mega_exp(p):
     '''mega_exp : opt_not super_exp
@@ -358,12 +502,47 @@ def p_var_cte(p):
                | CTE_S
                | TRUE
                | FALSE '''
+    if p[1] == 'TRUE':
+        pType.append('BOOL')
+        pilaO.append(True)
+
+    elif p[1] == 'FALSE':
+        pType.append('BOOL')
+        pilaO.append(False)
+
+    elif not is_number(p[1]):
+        try:
+            varscope = dir_func[actual_scope]['scope'][p[1]]
+        except KeyError:
+            varscope = dir_func['global']['scope'][p[1]]
+            pilaO.append(p[1])
+            pType.append(varscope.get('type'))
+        else:
+            pilaO.append(p[1])
+            pType.append(varscope.get('type'))
+
+    elif float(p[1]) % 1 != 0:
+        pType.append('FLOAT')
+        pilaO.append(float(p[1]))
+    elif int(p[1]):
+        pType.append('INT')
+        pilaO.append(int(p[1]))
+    else: 
+        pType.append('STRING')
+        pilaO.append(string(p[1]))
+
 
 def p_other(p):
-    '''other : ID other_arr_mat
+    '''other : ID other_index
              | call
              | empty '''
 
+def p_main(p):
+    'main : MAIN '{' more_vars more_bloques '}' '
+    actual_scope = p[1]
+    dir_func[p[1]] = {'type' : 'VOID', 'scope' : {}}
+    updateQuad(0, 'result', contQuads)
+    #print(dir_func.get('move'))
 
 
 ###############################################################################
