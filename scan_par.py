@@ -431,6 +431,15 @@ def p_exp(p):
       leftOperand = pop_pilaO()
       l_OP_type = pop_pType()
       operator = pop_pOper()
+      result_type = semantic_check(l_OP_type,r_OP_type,operator)
+      if result_type != 'error':
+        nextT = nextTemp(result_type)
+        add_quad(operator,leftOperand,rightOperand,'(' + str(nextT) + ')')
+        add_pilaO('(' +str(nextT) + ')')
+        add_pType(result_type)
+      else:
+        print('Error de tipo en una suma o resta')
+        sys.exit()
 
 
 
