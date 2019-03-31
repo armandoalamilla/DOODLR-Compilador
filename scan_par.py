@@ -17,17 +17,156 @@ pIterator = []
 pReturnTo = []
 pFunc = []
 pVar = []
-pArr =[]
 contQuads = 0
 contParam = 0
 funcToCall = ''
 currentQuad = 0
+memFunc = 30000
+Dim = 0
+R = 1
+toDim = ''
+axuDim = 0
 
 # Scope global
 actual_scope = 'global'
 
 # Directorio de funciones vacio
-dir_func[actual_scope] = { 'type' : 'VOID', 'scope' : {}, 'numParams' : 0}
+dir_func[actual_scope] = {'type' : 'VOID', 'scope' : {}, 'numParams' : 0, 'quadStart' : -1}
+
+# Declaración de direcciones para variables globales, temporales y de tipos.
+nextAvailable = {'gInt':1000, 'gFloat':5000, 'gBool':10000, 'tInt':15000, 'tFloat':20000,'tBool':25000 }
+
+# Inicializacion de la memoria vacia
+memoria = {}
+
+# Funcion que regresa el siguiente valor de memoria TEMPORAL disponible en base al tipo.
+def nextTemp(result_type):
+  if result_type == 'INT':
+    availableTemp = nextAvailable['tInt']
+    nextAvailable['tInt'] = availableTemp + 1
+    return availableTemp
+  elif result_type == 'FLOAT':
+    availableTemp = nextAvailable['tFloat']
+    nextAvailable['tFloat'] = availableTemp + 1
+    return availableTemp
+  elif result_type == 'BOOL':
+    availableTemp = nextAvailable['tBool']
+    nextAvailable['tBool'] = availableTemp + 1
+    return availableTemp
+
+# Funcion que regresa el siguiente valor de memoria GLOBAL disponible en base al tipo.
+def nextGlobal(result_type):
+  global actual_scope
+  if actual_scope =='global':
+    if result_type == 'INT':
+      availableGlobal = nextAvailable['gInt']
+      nextAvailable['gInt'] = availableGlobal + 1
+      return availableGlobal
+    elif result_type == 'FLOAT':
+      availableGlobal = nextAvailable['gFloat']
+      nextAvailable['gFloat'] = availableGlobal + 1
+      return availableGlobal
+    elif result_type == 'BOOL':
+      availableGlobal = nextAvailable['gBool']
+      nextAvailable['gBool'] = availableGlobal + 1
+      return availableGlobal
+  else:
+    print('Es funcion')
+
+####### Inicio de  Funciones auxiliares #####################
+# Funciones para agregar valores a pilas 
+def add_pFunc(id):
+  pFunc.append(id)
+
+def add_pVar(num):
+  pVar.append(num)
+
+def add_pilaReturn(quad):
+  pReturnTo.append(quad)
+
+def add_pilaO(id):
+    pilaO.append(id)
+
+def add_pOper(oper):
+    pOper.append(oper)
+
+def add_pType(type):
+    pType.append(type)
+
+def add_pJumps(quad):
+  pJumps.append(quad)
+
+def add_pIterator(iterator):
+  pIterator.append(iterator)
+
+# Funciones para sacar el ultimo elemento de pilas 
+def pop_pFunc():
+    if (len(pFunc) > 0):
+        return pFunc.pop()
+
+def pop_pVar():
+    if (len(pVar) > 0):
+        return pVar.pop()
+
+def pop_pilaReturn():
+  if(len(pReturnTo) > 0):
+    return pReturnTo.pop()
+
+def pop_pilaO():
+    if (len(pilaO) > 0):
+        return pilaO.pop()
+
+def pop_pOper():
+    if (len(pOper) > 0):
+        return pOper.pop()
+
+def pop_pType():
+    if (len(pType) > 0):
+        return pType.pop()
+
+def pop_pJumps():
+  if (len(pJumps) > 0):
+    return pJumps.pop()
+
+def pop_pIterator():
+  if (len(pIterator) > 0):
+    return pIterator.pop()
+
+
+# Funciones para regresar el tope de diferentes pilas 
+def top_pOper():
+    if (len(pOper) > 0):
+        temp = pop_pOper()
+        add_pOper(temp)
+        return temp
+    else:
+        return -1
+
+def top_pIterator():
+  if (len(pIterator) > 0):
+    temp = pop_pIterator()
+    add_pIterator(temp)
+    return temp
+  else:
+    return -1
+
+def top_pFunc():
+    if (len(pFunc) > 0):
+        temp = pop_pFunc()
+        add_pFunc(temp)
+        return temp
+    else:
+        return -1
+
+def top_pVar():
+    if (len(pVar) > 0):
+        temp = pop_pVar()
+        add_pVar(temp)
+        return temp
+    else:
+        return -1
+
+######## Fin de funciones auxiliares ########################
 
 # Agrega al diccionario de cuadruplos el cuadruplo que recibe
 def add_quad(operator,leftOperand,rightOperand,result):
@@ -60,7 +199,8 @@ def is_number(s):
 
 
 # Declaración del cubo semántico
-cubo_semantico = {'INT' :   { 'INT' : { '+': 'INT',
+cubo_semantico = {'INT' :   { 'INT' : { 
+                                    '+': 'INT',
                                     '-': 'INT',
                                     '/': 'FLOAT',
                                     '*': 'INT',
@@ -72,7 +212,8 @@ cubo_semantico = {'INT' :   { 'INT' : { '+': 'INT',
                                     '/=': 'BOOL',
                                     '==': 'BOOL',
                                     '=': 'INT'},
-                          'FLOAT': {'+': 'FLOAT',
+                          'FLOAT': {
+                                    '+': 'FLOAT',
                                     '-': 'FLOAT',
                                     '/': 'FLOAT',
                                     '*': 'FLOAT',
@@ -84,7 +225,8 @@ cubo_semantico = {'INT' :   { 'INT' : { '+': 'INT',
                                     '/=': 'BOOL',
                                     '==': 'BOOL',
                                     '=': 'int'}},
-                 'FLOAT' : {'INT' : {'+': 'FLOAT',
+                 'FLOAT' : {'INT' : {
+                                    '+': 'FLOAT',
                                     '-': 'FLOAT',
                                     '/': 'FLOAT',
                                     '*': 'FLOAT',
@@ -96,7 +238,8 @@ cubo_semantico = {'INT' :   { 'INT' : { '+': 'INT',
                                     '/=': 'BOOL',
                                     '==': 'BOOL',
                                      '=': 'FLOAT'},
-                          'FLOAT': {'+': 'FLOAT',
+                          'FLOAT': {
+                                    '+': 'FLOAT',
                                     '-': 'FLOAT',
                                     '/': 'FLOAT',
                                     '*': 'FLOAT',
@@ -108,13 +251,13 @@ cubo_semantico = {'INT' :   { 'INT' : { '+': 'INT',
                                     '/=': 'BOOL',
                                     '==': 'BOOL',
                                     '=': 'FLOAT'}},
-                 'BOOL' : {'BOOL' : {'AND' : 'BOOL',
+                 'BOOL' : {'BOOL' : {
+                                     'AND' : 'BOOL',
                                      'OR' : 'BOOL',
                                      '=' : 'BOOL'}}}
 
 
-######## Scanner ##########
-
+######## Palabras reservadas y 'literals' del lenguaje ##########
 literals = "{}()<>=;:,+-*/%&|^"
 
 reserved = {
@@ -205,17 +348,6 @@ def t_error(t):
 
 #Construye Lexer
 lexer = lex.lex()
-
-
-## Code to display all found tokens ######
-# lexer.input("<=")
-
-# print("List of Tokens: ")
-# while True:
-#    tok = lexer.token()
-#    if not tok:
-#        break
-#    print(tok)
 
 ##################################################################################################################################
 ########## Parser ##########
@@ -652,19 +784,32 @@ def p_main(p):
 ###############################################################################
 
 ########## Test ##########
-# fName = input("Which file do you want to use? (correct.txt / incorrect.txt): ")
+fName = input("Enter file name: ")
 
-# with open(fName, 'r') as myfile:
-#     s=myfile.read().replace('\n', '')
+with open(fName, 'r') as myfile:
+    s = myfile.read().replace('\n', '')
 
 # Construye Parser
 parser = yacc.yacc()
 
 parser.parse(s)
 
+
+## Code to display all found tokens ######
+lexer.input(s)
+
+print("List of Tokens: ")
+while True:
+   tok = lexer.token()
+   if not tok:
+       break
+   print(tok)
+
+
+
 if aprobado == True:
-    print("Archivo aprobado")
+    print("Aprobado")
     sys.exit()
 else: 
-    print("Archivo no aprobado")
+    print("NO aprobado")
     sys.exit()
