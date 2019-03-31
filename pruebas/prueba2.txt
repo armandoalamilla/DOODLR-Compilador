@@ -1,0 +1,31 @@
+PROGRAM {
+
+	VAR INT iAlgo
+	VAR INT iGalleta
+
+	iAlgo = 0
+	iGalleta = 3
+
+	MAIN{
+
+		repeat(iAlgo < iGalleta)
+		{
+
+		iAlgo = iAlgo + 3
+		iGalleta = iGalleta + 4
+
+		}
+
+		IF(NOT(iGalleta > iAlgo))
+		{
+			print(iAlgo)
+		}
+		ELSE
+		{
+			print(iGalleta)
+		}
+		
+	}
+
+
+}
