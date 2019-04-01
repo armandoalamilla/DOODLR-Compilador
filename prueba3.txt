@@ -1,0 +1,24 @@
+PROGRAM {
+
+	VAR INT iX
+	VAR FLOAT fG
+	VAR BOOL bInterruptor
+	VAR INT arr[99]
+	VAR FLOAT matA[99][99]
+
+	MAIN{
+
+		iX = 34
+		calculaRegresion(archivo)
+
+		REPEAT(iX < 0 AND iX > 0)
+		{
+			iX = iX + 1			
+
+		}
+
+
+		
+		
+	}
+}
