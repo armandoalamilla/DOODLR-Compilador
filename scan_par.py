@@ -538,15 +538,42 @@ def p_rel_op(p):
               | EQ
               | NEQ '''
 
+##################################################
 def p_exp(p):
-    '''exp : termino
-           | termino '+' exp
-           | termino '-' exp '''
+    '''exp : termino another_exp'''
+    top = top_pOper()
+    if top == '+' or top == '-':
+        rightOperand = pop_pilaO()
+        R_OP_type = pop_pType()
+        leftOperand = pop_pilaO()
+        L_OP_type = pop_pType()
+        operator = pop_pOper()
+        result_type = semantic_check(L_OP_type, R_OP_type, operator)
+        if result_type != 'error':
+            nextT = nextTemp(result_type)
+            add_quad(operator,leftOperand,rightOperand,'(' + str(nextT) + ')')
+            memoria[nextT] = 0
+            add_pilaO('(' + str(nextT) + ')')
+            add_pType(result_type)
+            #for q in quad: print q
+            #print(pType)
+    else:
+        print('Error de tipo en una suma o resta')
+        sys.exit()
+
+def p_another_exp(p):
+  '''another_exp : '+' exp
+                 | '-' exp 
+                 | empty'''
+  if len(p) > 2:
+      add_pOper(p[1])   
+##################################################
 
 def p_termino(p):
     '''termino : factor
                | factor '*' termino
                | factor '/' termino '''
+
 
 def p_factor(p): 
     '''factor : '(' super_exp ')'

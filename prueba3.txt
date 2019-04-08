@@ -4,7 +4,7 @@ PROGRAM {
 	VAR FLOAT fG
 	VAR BOOL bInterruptor
 	VAR INT arr[99]
-	VAR FLOAT matA[a][99]
+	VAR FLOAT matA[99][99]
 
 	MAIN{
 
