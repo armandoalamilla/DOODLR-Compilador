@@ -376,6 +376,41 @@ lexer = lex.lex()
 def p_programa(p):
     '''programa : PR_PROGRAM '{' more_vars more_funcs main '}' '''
 
+def p_var_cte(p):
+    '''var_cte : other
+               | CTEI
+               | CTEF
+               | CTES
+               | PR_TRUE
+               | PR_FALSE '''
+    if p[1] == 'TRUE':
+        add_pType('BOOL')
+        add_pilaO(True)
+    elif p[1] == 'FALSE':
+        add_pType('BOOL')
+        add_pilaO(False)
+    elif not is_number(p[1]):
+        try:
+            varscope = dir_func[actual_scope]['scope'][p[1]]
+        except KeyError:
+            varscope = dir_func['global']['scope'][p[1]]
+            add_pilaO(p[1])
+            add_pType(varscope.get('type'))
+        else:
+            add_pilaO(p[1])
+            add_pType(varscope.get('type'))
+    elif float(p[1]) % 1 != 0:
+        add_pType('FLOAT')
+        add_pilaO(float(p[1]))
+    else:
+        add_pType('INT')
+        add_pilaO(int(p[1]))
+
+def p_other(p):
+    '''other : ID other_index
+             | call
+             | empty '''
+
 
 def p_vars(p):
     '''vars : PR_VAR ids '''
@@ -450,15 +485,49 @@ def p_more_bloques(p):
 
 def p_assignation(p):
     '''assignation : assignTo '=' mega_exp'''
+    varia = p[1]
+    rightOperand = pop_pilaO()
+    R_OP_type = pop_pType()
+    try:
+        varscope = dir_func[actual_scope]['scope'][varia]
+    except KeyError:
+        varscope = dir_func['global']['scope'][varia]
+        result_check = semantic_check(varscope.get('type'),R_OP_type,'=')
+        if result_check != 'error':
+            add_quad('=','',rightOperand,varia)
+        else:
+            print("Error de tipos al asignar")
+            sys.exit()
+    else:
+        result_check = semantic_check(varscope.get('type'),R_OP_type,'=')
+        if result_check != 'error':
+            add_quad('=','',rightOperand,varia)
+        else:
+            print("Error de tipos al asignar")
+            sys.exit()
    
 def p_assignTo(p):
   '''assignTo : ID other_index'''
+  p[0] = p[1]
 
 def p_other_index(p):
     '''other_index : '[' exp ']'
                    | '[' exp ']' '[' exp ']'
                    | empty '''
-   
+
+def p_log_op(p):
+    '''log_op : PR_AND
+              | PR_OR
+              | PR_NOT '''
+
+def p_rel_op(p):
+    '''rel_op : '<'
+              | '>'
+              | LE
+              | GE
+              | EQ
+              | NEQ '''
+
 def p_loop(p):
     '''loop : PR_REPEAT '(' mega_exp ')' '{' more_bloques '}' '''
 
@@ -512,33 +581,78 @@ def p_call_1(p):
 def p_call_2(p):
   '''call_2 : exp ')' '''
 
+#######################################################
 def p_mega_exp(p):
-    '''mega_exp : opt_not super_exp
-                | opt_not super_exp log_op mega_exp '''
-
-def p_log_op(p):
-    '''log_op : PR_AND
-              | PR_OR
-              | PR_NOT '''
+    '''mega_exp : opt_not super_exp another_mega_exp '''
+    top = top_pOper()
+    if top == 'OR' or top == 'AND' or top == 'NOT':
+        rightOperand = pop_pilaO()
+        R_OP_type = pop_pType()
+        operator = pop_pOper()
+        if operator == 'NOT':
+            if R_OP_type == 'BOOL':
+                nextT = nextTemp(R_OP_type)
+                add_quad(operator,'',rightOperand,'(' + str(nextT) + ')')
+                memoria[nextT] = 0
+                add_pilaO('(' + str(nextT) + ')')
+                add_pType('BOOL')
+            else:
+                print('Error de tipo en negacion')
+                sys.exit()
+        else:
+            leftOperand = pop_pilaO()
+            L_OP_type = pop_pType()
+            result_type = semantic_check(L_OP_type, R_OP_type, operator)
+            if result_type != 'error':
+                nextT = nextTemp(result_type)
+                add_quad(operator,leftOperand,rightOperand,'(' + str(nextT) + ')')
+                memoria[nextT] = 0
+                add_pilaO('(' + str(nextT) + ')')
+                add_pType(result_type)
+                #for q in quad: print q
+                #print(pType)
+            else:
+                print('Error de tipo en una comparacion')
+                sys.exit()
 
 def p_opt_not(p):
     '''opt_not : PR_NOT
                | empty '''
+    if p[1] == 'NOT':
+        add_pOper(p[1])
+        #print(pOper) 
 
-
+def p_another_mega_exp(p):
+    '''another_mega_exp : log_op mega_exp
+                        | empty'''
+#######################################################
 def p_super_exp(p):
-    '''super_exp : exp 
-                 | exp rel_op super_exp '''
+    '''super_exp : exp opt_rel'''
 
-def p_rel_op(p):
-    '''rel_op : '<'
-              | '>'
-              | LE
-              | GE
-              | EQ
-              | NEQ '''
-
-##################################################
+def p_opt_rel(p):
+    '''opt_rel : rel_op exp
+               | empty'''
+    top = top_pOper()
+  
+    if top == '>' or top == '<' or top == '>=' or top == '<=' or top == '/=' or top == '==':
+        rightOperand = pop_pilaO()
+        R_OP_type = pop_pType()
+        leftOperand = pop_pilaO()
+        L_OP_type = pop_pType()
+        operator = pop_pOper()
+        result_type = semantic_check(L_OP_type, R_OP_type, operator)
+        if result_type != 'error':
+            nextT = nextTemp(result_type)
+            add_quad(operator,leftOperand,rightOperand,'(' + str(nextT) + ')')
+            memoria[nextT] = 0
+            add_pilaO('(' + str(nextT) + ')')
+            add_pType(result_type)
+            #for q in quad: print q
+            #print(pType)
+        else:
+            print('Error de tipo en una comparacion')
+            sys.exit()  
+#######################################################
 def p_exp(p):
     '''exp : termino another_exp'''
     top = top_pOper()
@@ -611,19 +725,6 @@ def p_factor(p):
               | '-' var_cte
               | var_cte '''
 
-def p_var_cte(p):
-    '''var_cte : other
-               | CTEI
-               | CTEF
-               | CTES
-               | PR_TRUE
-               | PR_FALSE '''
-
-def p_other(p):
-    '''other : ID other_index
-             | call
-             | empty '''
-
 def p_main(p):
     '''main : PR_MAIN '{' more_vars more_bloques '}' '''
 
@@ -636,11 +737,7 @@ def p_error(p):
     aprobado = False
     print("Error de sintaxis en '%s'" % p.value)
     sys.exit()
-
-
-
 ###############################################################################
-
 ########## Test ##########
 fName = input("Enter file name: ")
 
