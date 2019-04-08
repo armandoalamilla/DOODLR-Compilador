@@ -417,11 +417,25 @@ def p_vars(p):
 
 def p_ids(p):
    '''ids : type ID index'''
+   if not p[2] in dir_func[actual_scope]['scope']:
+    varAddress = 0
+
+    if actual_scope == 'global':
+      varAddress = nextGlobal(p[1])
+
+      dir_func[actual_scope]['scope'][p[2]] = {'type' : p[1], 'address':varAddress}
+      memoria[varAddress] = 0
+    else:
+      dir_func[actual_scope]['scope'][p[2]] = {'type' : p[1]}
+  else:
+    print('Variable ' + p[2] + ' ya declarada')
+    sys.exit()
 
 def p_index(p):
     '''index : '[' CTEI ']'
              | '[' CTEI ']' '[' CTEI ']'
              | empty '''
+
 
 def p_type(p):
     '''type : PR_INT
@@ -553,6 +567,14 @@ def p_do_else(p):
 
 def p_return(p):
     '''return : PR_RETURN mega_exp '''
+    rightOperand = pop_pilaO()
+    R_OP_type = pop_pType()
+    result_type = semantic_check(dir_func[actual_scope].get('type'),R_OP_type,'=')
+    if result_type != 'error':
+        add_quad('RET','',rightOperand,'')
+    else:
+        print('Error de tipo al retornar en la funcion ' + actual_scope)
+        sys.exit()
 
 def p_lecture(p):
     '''lecture : PR_READ ARR ID index '''
@@ -575,11 +597,33 @@ def p_call(p):
             | func_pred '''
 
 
+
 def p_call_1(p):
   '''call_1 : ID '(' ''' 
+  if p[1] in dir_func:
+    add_quad('ERA','',p[1],'')
+    global funcToCall
+    funcToCall = p[1]
+  else:
+      print('Error la funcion ' + p[1] + ' no existe')
+      sys.exit()
 
 def p_call_2(p):
   '''call_2 : exp ')' '''
+  global contParam
+  if contParam == dir_func[funcToCall].get('numParams'):
+    add_quad('GOSUB',funcToCall,'','')
+    if dir_func[funcToCall].get('type') != 'VOID':
+        nextT = nextTemp(dir_func[funcToCall].get('type'))
+        add_quad('=','',funcToCall,'(' + str(nextT) + ')') 
+        memoria[nextT] = 0
+        add_pilaO('(' + str(nextT) + ')')
+        add_pType(dir_func[funcToCall].get('type'))
+    contParam = 0
+  else:
+      print('Error en el numero de parametros de ' + funcToCall)
+      sys.exit()
+
 
 #######################################################
 def p_mega_exp(p):
