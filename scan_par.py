@@ -571,13 +571,7 @@ def p_another_exp(p):
 
 def p_termino(p):
 '''termino : factor another_termino'''
-    
-
-def p_another_termino(p)
-'''another_termino : '*' termino
-                   | '/' termino 
-                   | empty '''
-  top = top_pOper()
+ top = top_pOper()
   if top == '*' or top == '/':
     rightOperand = pop_pilaO()
     R_OP_type = pop_pType()
@@ -599,6 +593,15 @@ def p_another_termino(p)
     else:
       print('Error de tipo en una multiplicacion o division')
       sys.exit()
+    
+
+def p_another_termino(p)
+'''another_termino : '*' termino
+                   | '/' termino 
+                   | empty '''
+if len(p) > 2:
+    add_pOper(p[1])                   
+ 
 
 
 
