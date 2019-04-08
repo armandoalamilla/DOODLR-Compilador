@@ -199,101 +199,123 @@ def is_number(s):
 
 
 # Declaración del cubo semántico
-cubo_semantico = {'INT' :   { 'INT' : { 
-                                    '+': 'INT',
-                                    '-': 'INT',
-                                    '/': 'FLOAT',
-                                    '*': 'INT',
-                                    '%': 'INT',
-                                    '<': 'BOOL',
-                                    '>': 'BOOL',
-                                    '<=': 'BOOL',
-                                    '>=': 'BOOL',
-                                    '/=': 'BOOL',
-                                    '==': 'BOOL',
-                                    '=': 'INT'},
-                          'FLOAT': {
-                                    '+': 'FLOAT',
-                                    '-': 'FLOAT',
-                                    '/': 'FLOAT',
-                                    '*': 'FLOAT',
-                                    '%': 'FLOAT',
-                                    '<': 'BOOL',
-                                    '>': 'BOOL',
-                                    '<=': 'BOOL',
-                                    '>=': 'BOOL',
-                                    '/=': 'BOOL',
-                                    '==': 'BOOL',
-                                    '=': 'int'}},
-                 'FLOAT' : {'INT' : {
-                                    '+': 'FLOAT',
-                                    '-': 'FLOAT',
-                                    '/': 'FLOAT',
-                                    '*': 'FLOAT',
-                                    '%': 'FLOAT',
-                                    '<': 'BOOL',
-                                    '>': 'BOOL',
-                                    '<=': 'BOOL',
-                                    '>=': 'BOOL',
-                                    '/=': 'BOOL',
-                                    '==': 'BOOL',
-                                     '=': 'FLOAT'},
-                          'FLOAT': {
-                                    '+': 'FLOAT',
-                                    '-': 'FLOAT',
-                                    '/': 'FLOAT',
-                                    '*': 'FLOAT',
-                                    '%': 'FLOAT',
-                                    '<': 'BOOL',
-                                    '>': 'BOOL',
-                                    '<=': 'BOOL',
-                                    '>=': 'BOOL',
-                                    '/=': 'BOOL',
-                                    '==': 'BOOL',
-                                    '=': 'FLOAT'}},
-                 'BOOL' : {'BOOL' : {
-                                     'AND' : 'BOOL',
-                                     'OR' : 'BOOL',
-                                     '=' : 'BOOL'}}}
+cubo_semantico = {
+        'INT' : { 
+            'INT' : { 
+                '+': 'INT',
+                '-': 'INT',
+                '/': 'FLOAT',
+                '*': 'INT',
+                '%': 'INT',
+                '<': 'BOOL',
+                '>': 'BOOL',
+                '<=': 'BOOL',
+                '>=': 'BOOL',
+                '/=': 'BOOL',
+                '==': 'BOOL',
+                '=': 'INT'
+            },
+            'FLOAT': {
+                '+': 'FLOAT',
+                '-': 'FLOAT',
+                '/': 'FLOAT',
+                '*': 'FLOAT',
+                '%': 'FLOAT',
+                '<': 'BOOL',
+                '>': 'BOOL',
+                '<=': 'BOOL',
+                '>=': 'BOOL',
+                '/=': 'BOOL',
+                '==': 'BOOL',
+                '=': 'INT'
+            }
+        },
+        'FLOAT' : {
+            'INT' : {
+                '+': 'FLOAT',
+                '-': 'FLOAT',
+                '/': 'FLOAT',
+                '*': 'FLOAT',
+                '%': 'FLOAT',
+                '<': 'BOOL',
+                '>': 'BOOL',
+                '<=': 'BOOL',
+                '>=': 'BOOL',
+                '/=': 'BOOL',
+                '==': 'BOOL',
+                 '=': 'FLOAT'
+            },
+            'FLOAT': {
+                '+': 'FLOAT',
+                '-': 'FLOAT',
+                '/': 'FLOAT',
+                '*': 'FLOAT',
+                '%': 'FLOAT',
+                '<': 'BOOL',
+                '>': 'BOOL',
+                '<=': 'BOOL',
+                '>=': 'BOOL',
+                '/=': 'BOOL',
+                '==': 'BOOL',
+                '=': 'FLOAT'
+            }
+        },
+        'BOOL' : {
+            'BOOL' : {
+               'AND' : 'BOOL',
+               'OR' : 'BOOL',
+               '=' : 'BOOL'
+            }
+        },
+        'STRING': {
+            'STRING' : {
+               '+': 'STRING',
+               '=': 'STRING',
+               '==': 'BOOL',
+               '/=': 'BOOL'
+            }
+        }
+}
+            
 
 
 ######## Palabras reservadas y 'literals' del lenguaje ##########
-literals = "{}()<>=;:,+-*/%&|^"
+literals = "}{()<>=;:,+-*/%&|^[]"
 
 reserved = {
 
- 'PROGRAM' : 'PROGRAM',
- 'FUNCTION': 'FUNCTION',
- 'RETURN'  : 'RETURN',
- 'MAIN'    : 'MAIN',
+       'PROGRAM' : 'PR_PROGRAM',
+       'PR_FUNCTION': 'PR_FUNCTION',
+       'RETURN'  : 'PR_RETURN',
+       'MAIN'    : 'PR_MAIN',
 
 
- 'calculaRegresion' : 'calculaRegresion',
- 'prediceResultado' : 'prediceResultado',
- 'calculaModa'      : 'calculaModa',
- 'calculaMediana'   : 'calculaMediana',
- 'calculaMedia'     : 'calculaMedia',
- 'calculaPoisson'   : 'calculaPoisson',
- 'calculaBinomial'  : 'calculaBinomial',
- 'calculaNormal'    : 'calculaNormal',
- 
+       'calculaRegresion' : 'PR_calculaRegresion',
+       'prediceResultado' : 'PR_prediceResultado',
+       'calculaModa'      : 'PR_calculaModa',
+       'calculaMediana'   : 'PR_calculaMediana',
+       'calculaMedia'     : 'PR_calculaMedia',
+       'calculaPoisson'   : 'PR_calculaPoisson',
+       'calculaBinomial'  : 'PR_calculaBinomial',
+       'calculaNormal'    : 'PR_calculaNormal',
+       
 
- 'IF'      : 'IF',
- 'ELSE'    : 'ELSE',
- 'PRINT'   : 'PRINT',
- 'READ'    : 'READ',
- 'VAR'     : 'VAR',
- 'REPEAT'  : 'REPEAT',
- 'TRUE'    : 'true',
- 'FALSE'   : 'FALSE',
- 'INT'     : 'INT',
- 'FLOAT'   : 'FLOAT',
- 'BOOL'    : 'BOOL',
- 'STRING'  : 'STRING',
- 'VOID'    : 'VOID',
- 'AND'     : 'AND',
- 'OR'      : 'OR',
- 'NOT'     : 'NOT',
+       'IF'      : 'PR_IF',
+       'ELSE'    : 'PR_ELSE',
+       'PRINT'   : 'PR_PRINT',
+       'READ'    : 'PR_READ',
+       'VAR'     : 'PR_VAR',
+       'REPEAT'  : 'PR_REPEAT',
+       'TRUE'    : 'PR_TRUE',
+       'FALSE'   : 'PR_FALSE',
+       'INT'     : 'PR_INT',
+       'FLOAT'   : 'PR_FLOAT',
+       'BOOL'    : 'PR_BOOL',
+       'STRING'  : 'PR_STRING',
+       'VOID'    : 'PR_VOID',
+       'AND'     : 'PR_AND',
+       'OR'      : 'PR_OR',
+       'NOT'     : 'PR_NOT',
 
 }
 
@@ -342,7 +364,7 @@ def t_CTES(t):
 
 def t_error(t):
     global aprobado
-    aprobado = FALSE
+    aprobado = False
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)    
 
@@ -351,105 +373,47 @@ lexer = lex.lex()
 
 ##################################################################################################################################
 ########## Parser ##########
-
-# Funciones para regresar el tope de 
-# diferentes pilas para su uso
-def top_pOper():
-    if (len(pOper) > 0):
-        temp = pop_pOper()
-        add_pOper(temp)
-        return temp
-    else:
-        return -1
-
-
-def top_pIterator():
-  if (len(pIterator) > 0):
-    temp = pop_pIterator()
-    add_pIterator(temp)
-    return temp
-  else:
-    return -1
-def top_pFunc():
-    if (len(pFunc) > 0):
-        temp = pop_pFunc()
-        add_pFunc(temp)
-        return temp
-    else:
-        return -1
-def top_pVar():
-    if (len(pVar) > 0):
-        temp = pop_pVar()
-        add_pVar(temp)
-        return temp
-    else:
-        return -1
-
-def p_empty(p):
-    '''empty : '''
-    pass
-
 def p_programa(p):
-    '''programa : PROGRAM '{' more_vars more_funcs main '}' '''
+    '''programa : PR_PROGRAM '{' more_vars more_funcs main '}' '''
 
 
 def p_vars(p):
-    '''vars : VAR ids '''
+    '''vars : PR_VAR ids '''
 
 def p_ids(p):
-    'ids : type ID index'
-    #print(actual_scope)
-    dir_func[actual_scope]['scope'][p[2]] = {'type' : p[1]}
-    #print(dir_func.get(actual_scope))
+   '''ids : type ID index'''
 
 def p_index(p):
-    '''index : '[' CTE_I ']'
-             | '[' CTE_I ']' '[' CTE_I ']'
+    '''index : '[' CTEI ']'
+             | '[' CTEI ']' '[' CTEI ']'
              | empty '''
 
 def p_type(p):
-    '''type : INT
-            | FLOAT
-            | BOOL
-            | STRING '''
-    p[0] = p[1]
-
-
+    '''type : PR_INT
+            | PR_FLOAT
+            | PR_BOOL
+            | PR_STRING '''
 
 ### Revisar ###########################################
  
 def p_func(p):
-  'func : func1 func2'
+  '''func : func1 func2'''
 
 def p_func1(p):
-  'func1 : func1_1 func1_2'
+  '''func1 : func1_1 func1_2'''
 
 
 def p_func1_1(p):
-  '''func1_1 : FUNCTION func_type ID '(' '''
-  if not p[3] in dir_func:
-      global actual_scope
-    
-      if p[2] != 'VOID':
-          dir_func['global']['scope'][p[3]] = {'type' : p[2]}
-          
-      actual_scope = p[3]
-      dir_func[p[3]] = { 'type' : p[2], 'scope' : {}, 'numParams' : 0, 'quadStart' : contQuads }
-  else:
-      print("Funcion " + p[3] +" ya declarada")
-      sys.exit()
+  '''func1_1 : PR_FUNCTION func_type ID '(' '''
+
 
 def p_func1_2(p):
   '''func1_2 : more_ids ')' '{' '''
 
 def p_func2(p):
   '''func2 : more_vars more_bloques '}' '''
-  add_quad('ENDPROC','','','')
-
+  
 ### Revisar #######################################
-
-
-
 
 def p_more_ids(p):
     '''more_ids : ids 
@@ -458,8 +422,7 @@ def p_more_ids(p):
 
 def p_func_type(p):
     '''func_type : type
-                 | VOID '''
-    p[0] = p[1]
+                 | PR_VOID '''
 
 def p_bloque(p):
     '''bloque : assignation
@@ -486,33 +449,10 @@ def p_more_bloques(p):
                     | empty '''
 
 def p_assignation(p):
-    'assignation : assignTo '=' mega_exp'
-    myVar = p[1]
-    rightOperand = pilaO.pop()
-    R_OP_type = pType.pop()
-
-    try:
-        varscope = dir_func[actual_scope]['scope'][myVar]
-    except KeyError:
-        varscope = dir_func['global']['scope'][myVar]
-        result_check = semantic_check(varscope.get('type'),R_OP_type,'=')
-        if result_check != 'error':
-          add_quad('=','',rightOperand,myVar)
-        else:
-          print("Error de tipos al asignar")
-          sys.exit()
-    else:
-        result_check = semantic_check(varscope.get('type'),R_OP_type,'=')
-        if result_check != 'error':
-          add_quad('=','',rightOperand,myVar)
-        else:
-          print("Error de tipos al asignar")
-          sys.exit()
-
-
+    '''assignation : assignTo '=' mega_exp'''
+   
 def p_assignTo(p):
-  '''assignTo : ID arrayIndex'''
-  p[0] = p[1]
+  '''assignTo : ID other_index'''
 
 def p_other_index(p):
     '''other_index : '[' exp ']'
@@ -520,76 +460,46 @@ def p_other_index(p):
                    | empty '''
    
 def p_loop(p):
-    '''loop : REPEAT '(' exp ')' '{' more_bloques '}' '''
-
-def p_cond(p):
-    '''cond : IF '(' mega_exp ')' '{' more_bloques '}'
-            | IF '(' mega_exp ')' '{' more_bloques '}' ELSE '{' more_bloques '}' '''
+    '''loop : PR_REPEAT '(' mega_exp ')' '{' more_bloques '}' '''
 
 
 def p_cond(p):
-  'cond : cond1 cond2'
-
+  '''cond : cond1 cond2'''
 
 def p_cond1(p):
-  '''cond1 : IF '(' mega_exp ')' '{' '''
-  exp_type = pType.pop()
-  if exp_type == 'BOOL':
-    global contQuads
-    resultado = pilaO.pop()
-    add_quad('GOTOF', resultado, '', '')
-    pJumps.append(contQuads - 1)
-  else:
-    print('Error de tipo en IF')
-    sys.exit()
+  '''cond1 : PR_IF '(' mega_exp ')' '{' '''
 
 def p_cond2(p):
   '''cond2 : more_bloques '}' maybe_else'''
-  fin = pJumps.pop()
-  global contQuads
-  updateQuad(fin,'result',contQuads)
 
 def p_maybe_else(p):
   '''maybe_else : check_else do_else 
                 | empty'''
   
 def p_checkElse(p):
-  '''check_else : ELSE '{' '''
-  add_quad('GOTO','','','')
-  falso = pJumps.pop()
-  global contQuads
-  pJumps.append(contQuads - 1)
-  updateQuad(falso,'result',contQuads)
+  '''check_else : PR_ELSE '{' '''
 
-def p_doElse(p):
-  '''doElse : more_bloques '}' '''
+def p_do_else(p):
+  '''do_else : more_bloques '}' '''
 
 def p_return(p):
-    '''return : RETURN mega_exp '''
-    rightOperand = pilaO.pop()
-    R_OP_type = pType.pop()
-    result_type = semantic_check(dir_func[actual_scope].get('type'),R_OP_type,'=')
-    if result_type != 'error':
-        add_quad('RET','',rightOperand,'')
-    else:
-        print('Error de tipo al retornar en la funcion ' + actual_scope)
-    sys.exit()
+    '''return : PR_RETURN mega_exp '''
 
 def p_lecture(p):
-    '''lecture : READ ARR ID arr_mat '''
+    '''lecture : PR_READ ARR ID index '''
 
 def p_writing(p):
-    '''writing : PRINT '(' mega_exp ')' '''
+    '''writing : PR_PRINT '(' mega_exp ')' '''
 
 def p_func_pred(p):
-    '''func_pred : calculaRegresion '(' exp ')'
-                 | prediceResultado '(' exp ')'
-                 | calculaModa '(' exp ')'
-                 | calculaMediana '(' exp ')'
-                 | calculaMedia '(' exp ')' 
-                 | calculaPoisson '(' exp ')'
-                 | calculaBinomial '(' exp ')'
-                 | calculaNormal '(' exp ')' '''
+    '''func_pred : PR_calculaRegresion '(' exp ')'
+                 | PR_prediceResultado '(' exp ')'
+                 | PR_calculaModa '(' exp ')'
+                 | PR_calculaMediana '(' exp ')'
+                 | PR_calculaMedia '(' exp ')' 
+                 | PR_calculaPoisson '(' exp ')'
+                 | PR_calculaBinomial '(' exp ')'
+                 | PR_calculaNormal '(' exp ')' '''
 
 def p_call(p):
     '''call : call_1 call_2 
@@ -597,100 +507,33 @@ def p_call(p):
 
 
 def p_call_1(p):
-  '''call_1 : ID '(' '''
-  if p[1] in dir_func:
-    add_quad('ERA','',p[1],'')
-    global funcToCall
-    funcToCall = p[1]
-  else:
-    print('Error la funcion ' + p[1] + ' no existe')
-    sys.exit()  
+  '''call_1 : ID '(' ''' 
 
 def p_call_2(p):
   '''call_2 : exp ')' '''
-  global contParam
-  if contParam == dir_func[funcToCall].get('numParams'):
-    add_quad('GOSUB',funcToCall,'','')
-    if dir_func[funcToCall].get('type') != 'VOID':
-      nextT = nextTemp(dir_func[funcToCall].get('type'))
-      add_quad('=','',funcToCall,'(' + str(nextT) + ')') 
-      pilaO.append('(' + str(nextT) + ')')
-      pType.append(dir_func[funcToCall].get('type'))
-    contParam = 0
-  else:
-    print('Error en el numero de parametros de ' + funcToCall)
-    sys.exit()
 
 def p_mega_exp(p):
     '''mega_exp : opt_not super_exp
                 | opt_not super_exp log_op mega_exp '''
-    top = top_pOper()
-    if top = 'OR' or top =='AND' or top == 'NOT':
-      rightOperand = pilaO.pop()
-      R_OP_type = pType.pop()
-      operator = pOper.pop()
-      if operator == 'NOT':
-        if R_OP_type == 'BOOL':
-          nextT = nextTemp(R_OP_type)
-          add_quad(operator,'',rightOperand,'(' + str(nextT) + ')')
-          add_pilaO('(' + str(nextT) + ')')
-          add_pType('BOOL')
-        else:
-          print('Error de tipo en negacion')
-          sys.exit()
-      else:
-        leftOperand = pilaO.pop()
-        l_OP_type = pType.pop()
-        result_type = semantic_check(l_OP_type, R_OP_type, operator)
-        if result_type != 'error':
-          nextT = nextTemp(result_type)
-          add_quad(operator,leftOperand,rightOperand,'(' + str(nextT) + ')')
-          add_pilaO('(' + str(nextT) + ')')
-          add_pType(result_type)
-        else:
-          print('Error de tipo en una comparacion')
-          sys.exit()
-
-
-
-
-
-
-
 
 def p_log_op(p):
-    '''log_op : AND
-              | OR
-              | NOT '''
+    '''log_op : PR_AND
+              | PR_OR
+              | PR_NOT '''
 
 def p_opt_not(p):
-    '''opt_not : NOT
+    '''opt_not : PR_NOT
                | empty '''
+
 
 def p_super_exp(p):
     '''super_exp : exp 
                  | exp rel_op super_exp '''
-    top = top_pOper()
-
-    if top == '>' or top == '<' or top == '>=' or top =='<=' or top == '!=' or top == '==':
-      rightOperand = pilaO.pop()
-      R_OP_type = pType.pop()
-      leftOperand = pilaO.pop()
-      l_OP_type = pType.pop()
-      operator = pOper.pop()
-      result_type = semantic_check(l_OP_type,r_OP_type,operator)
-      if result_type != 'error':
-        nextT = nextTemp(result_type)
-        add_quad(operator,leftOperand,rightOperand,'(' + str(nextT) + ')')
-        add_pilaO('(' + str(nextT) + ')')
-        add_pType(result_type)
-      else:
-        print('Error de tipo en una comparacion')
-        sys.exit()
-
 
 def p_rel_op(p):
-    '''rel_op : LE
+    '''rel_op : '<'
+              | '>'
+              | LE
               | GE
               | EQ
               | NEQ '''
@@ -699,26 +542,6 @@ def p_exp(p):
     '''exp : termino
            | termino '+' exp
            | termino '-' exp '''
-
-    top = top_pOper()
-    if top == '+' or top == '-':
-      rightOperand = pilaO.pop()
-      r_OP_type =pType´.pop()
-      leftOperand = pilaO.pop()
-      l_OP_type = pType.pop()
-      operator = pOper.pop()
-      result_type = semantic_check(l_OP_type,r_OP_type,operator)
-      if result_type != 'error':
-        nextT = nextTemp(result_type)
-        add_quad(operator,leftOperand,rightOperand,'(' + str(nextT) + ')')
-        add_pilaO('(' +str(nextT) + ')')
-        add_pType(result_type)
-      else:
-        print('Error de tipo en una suma o resta')
-        sys.exit()
-
-
-
 
 def p_termino(p):
     '''termino : factor
@@ -733,40 +556,11 @@ def p_factor(p):
 
 def p_var_cte(p):
     '''var_cte : other
-               | CTE_I
-               | CTE_F
-               | CTE_S
-               | TRUE
-               | FALSE '''
-    if p[1] == 'TRUE':
-        pType.append('BOOL')
-        pilaO.append(True)
-
-    elif p[1] == 'FALSE':
-        pType.append('BOOL')
-        pilaO.append(False)
-
-    elif not is_number(p[1]):
-        try:
-            varscope = dir_func[actual_scope]['scope'][p[1]]
-        except KeyError:
-            varscope = dir_func['global']['scope'][p[1]]
-            pilaO.append(p[1])
-            pType.append(varscope.get('type'))
-        else:
-            pilaO.append(p[1])
-            pType.append(varscope.get('type'))
-
-    elif float(p[1]) % 1 != 0:
-        pType.append('FLOAT')
-        pilaO.append(float(p[1]))
-    elif int(p[1]):
-        pType.append('INT')
-        pilaO.append(int(p[1]))
-    else: 
-        pType.append('STRING')
-        pilaO.append(string(p[1]))
-
+               | CTEI
+               | CTEF
+               | CTES
+               | PR_TRUE
+               | PR_FALSE '''
 
 def p_other(p):
     '''other : ID other_index
@@ -774,11 +568,18 @@ def p_other(p):
              | empty '''
 
 def p_main(p):
-    'main : MAIN '{' more_vars more_bloques '}' '
-    actual_scope = p[1]
-    dir_func[p[1]] = {'type' : 'VOID', 'scope' : {}}
-    updateQuad(0, 'result', contQuads)
-    #print(dir_func.get('move'))
+    '''main : PR_MAIN '{' more_vars more_bloques '}' '''
+
+def p_empty(p):
+    '''empty : '''
+    pass
+
+def p_error(p):
+    global aprobado
+    aprobado = False
+    print("Error de sintaxis en '%s'" % p.value)
+    sys.exit()
+
 
 
 ###############################################################################
@@ -804,7 +605,6 @@ while True:
    if not tok:
        break
    print(tok)
-
 
 
 if aprobado == True:

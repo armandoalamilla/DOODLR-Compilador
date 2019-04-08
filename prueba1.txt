@@ -1,0 +1,10 @@
+PROGRAM {
+
+	VAR INT iX
+
+	MAIN{
+
+		iX = 34
+		
+	}
+}
