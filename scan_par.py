@@ -570,9 +570,36 @@ def p_another_exp(p):
 ##################################################
 
 def p_termino(p):
-    '''termino : factor
-               | factor '*' termino
-               | factor '/' termino '''
+'''termino : factor another_termino'''
+    
+
+def p_another_termino(p)
+'''another_termino : '*' termino
+                   | '/' termino 
+                   | empty '''
+  top = top_pOper()
+  if top == '*' or top == '/':
+    rightOperand = pop_pilaO()
+    R_OP_type = pop_pType()
+    leftOperand = pop_pilaO()
+    L_OP_type = pop_pType()
+    operator = pop_pOper()
+
+    result_type = semantic_check(L_OP_type, R_OP_type, operator)
+
+    if result_type != 'error':
+      nextT = nextTemp(result_type)
+      #cont de termporales
+      add_quad(operator,leftOperand,rightOperand,'(' + str(nextT) + ')')
+      memoria[nextT] = 0
+      add_pilaO('(' + str(nextT) + ')')
+      add_pType(result_type)
+      #for q in quad: print q
+      #print(pType)
+    else:
+      print('Error de tipo en una multiplicacion o division')
+      sys.exit()
+
 
 
 def p_factor(p): 
