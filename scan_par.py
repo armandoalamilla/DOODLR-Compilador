@@ -382,11 +382,25 @@ def p_vars(p):
 
 def p_ids(p):
    '''ids : type ID index'''
+   if not p[2] in dir_func[actual_scope]['scope']:
+    varAddress = 0
+
+    if actual_scope == 'global':
+      varAddress = nextGlobal(p[1])
+
+      dir_func[actual_scope]['scope'][p[2]] = {'type' : p[1], 'address':varAddress}
+      memoria[varAddress] = 0
+    else:
+      dir_func[actual_scope]['scope'][p[2]] = {'type' : p[1]}
+  else:
+    print('Variable ' + p[2] + ' ya declarada')
+    sys.exit()
 
 def p_index(p):
     '''index : '[' CTEI ']'
              | '[' CTEI ']' '[' CTEI ']'
              | empty '''
+
 
 def p_type(p):
     '''type : PR_INT
@@ -512,7 +526,7 @@ def p_func_pred(p):
 def p_call(p):
     '''call : call_1 call_2 
             | func_pred '''
-    
+
 
 
 def p_call_1(p):
