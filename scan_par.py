@@ -374,15 +374,15 @@ lexer = lex.lex()
 ##################################################################################################################################
 ########## Parser ##########
 def p_programa(p):
-    '''programa : PR_PROGRAM '{' more_vars more_funcs main '}' '''
+    '''programa : PR_PROGRAM '{' declarations main '}' '''
 
-def p_var_cte(p):
-    '''var_cte : other
-               | CTEI
-               | CTEF
-               | CTES
-               | PR_TRUE
-               | PR_FALSE '''
+def p_value(p):
+    '''value : CTEI
+             | CTEF
+             | CTES
+             | PR_TRUE
+             | PR_FALSE
+             | ID'''
     if p[1] == 'TRUE':
         add_pType('BOOL')
         add_pilaO(True)
@@ -406,96 +406,42 @@ def p_var_cte(p):
         add_pType('INT')
         add_pilaO(int(p[1]))
 
-def p_other(p):
-    '''other : ID other_index
-             | call
-             | empty '''
+def p_declarations(p):
+    '''declarations : dec_var dec_func'''
 
+def p_dec_var(p):
+    '''dec_var : var dec_var 
+               | empty '''
 
-def p_vars(p):
-    '''vars : PR_VAR ids '''
+def p_dec_func(p):
+    '''dec_func : func dec_func 
+                | empty '''
 
-def p_ids(p):
-   '''ids : type ID index'''
-   if not p[2] in dir_func[actual_scope]['scope']:
-    varAddress = 0
-
-    if actual_scope == 'global':
-      varAddress = nextGlobal(p[1])
-
-      dir_func[actual_scope]['scope'][p[2]] = {'type' : p[1], 'address':varAddress}
-      memoria[varAddress] = 0
+def p_var(p):
+    '''var : PR_VAR type ID index'''
+    if not p[3] in dir_func[actual_scope]['scope']:
+      varAddress = 0
+      if actual_scope == 'global':
+        varAddress = nextGlobal(p[2])
+        dir_func[actual_scope]['scope'][p[3]] = {'type' : p[2], 'address':varAddress}
+        memoria[varAddress] = 0
+      else:
+        dir_func[actual_scope]['scope'][p[3]] = {'type' : p[2]}
     else:
-      dir_func[actual_scope]['scope'][p[2]] = {'type' : p[1]}
-  else:
-    print('Variable ' + p[2] + ' ya declarada')
-    sys.exit()
+      print('Variable ' + p[3] + ' ya declarada')
+      sys.exit()
 
 def p_index(p):
     '''index : '[' CTEI ']'
              | '[' CTEI ']' '[' CTEI ']'
              | empty '''
 
-
 def p_type(p):
     '''type : PR_INT
             | PR_FLOAT
             | PR_BOOL
             | PR_STRING '''
-
-### Revisar ###########################################
- 
-def p_func(p):
-  '''func : func1 func2'''
-
-def p_func1(p):
-  '''func1 : func1_1 func1_2'''
-
-
-def p_func1_1(p):
-  '''func1_1 : PR_FUNCTION func_type ID '(' '''
-
-
-def p_func1_2(p):
-  '''func1_2 : more_ids ')' '{' '''
-
-def p_func2(p):
-  '''func2 : more_vars more_bloques '}' '''
-  
-### Revisar #######################################
-
-def p_more_ids(p):
-    '''more_ids : ids 
-                | ids more_ids
-                | empty '''
-
-def p_func_type(p):
-    '''func_type : type
-                 | PR_VOID '''
-
-def p_bloque(p):
-    '''bloque : assignation
-              | loop
-              | cond
-              | return
-              | lecture
-              | writing
-              | call  '''
-
-def p_more_vars(p):
-    '''more_vars : vars 
-                 | vars more_vars
-                 | empty '''
-
-def p_more_funcs(p):
-    '''more_funcs : func
-                  | func more_funcs
-                  | empty '''
-
-def p_more_bloques(p):
-    '''more_bloques : bloque
-                    | bloque more_bloques 
-                    | empty '''
+    p[0] = p[1]
 
 def p_assignation(p):
     '''assignation : assignTo '=' mega_exp'''
@@ -517,7 +463,7 @@ def p_assignation(p):
         if result_check != 'error':
             add_quad('=','',rightOperand,varia)
         else:
-            print("Error de tipos al asignar")
+            print("Error de tipos al intentar asignar.")
             sys.exit()
    
 def p_assignTo(p):
@@ -528,11 +474,108 @@ def p_other_index(p):
     '''other_index : '[' exp ']'
                    | '[' exp ']' '[' exp ']'
                    | empty '''
+ 
+def p_func(p):
+  '''func : func1 func2'''
+
+def p_func1(p):
+  '''func1 : func1_1 func1_2'''
+
+def p_func1_1(p):
+  '''func1_1 : PR_FUNCTION func_type ID '(' '''
+  if not p[3] in dir_func:
+      global actual_scope
+      if p[2] != 'VOID':
+          varAddress = nextGlobal(p[2])
+          dir_func['global']['scope'][p[3]] = {'type' : p[2], 'address':varAddress }
+          memoria[varAddress] = 0
+
+      actual_scope = p[3]
+      dir_func[p[3]] = { 'type' : p[2], 'scope' : {}, 'numParams' : 0, 'quadStart' : contQuads }
+  else:
+      print("Funcion "+ p[3] +" ya declarada.")
+      sys.exit()
+
+
+def p_func1_2(p):
+  '''func1_2 : params ')' '{' '''
+
+def p_func2(p):
+  '''func2 : dec_var block '}' '''
+  add_quad('ENDPROC','','','')
+
+def p_func_type(p):
+  '''func_type : type
+               | PR_VOID '''
+  p[0] = p[1]
+
+def p_params(p):
+  '''params : type ID more_params
+            | empty'''
+  if len (p) > 2:
+    dir_func[actual_scope]['scope'][p[2]] = {'type' : p[1]}
+    dir_func[actual_scope]['numParams'] = dir_func[actual_scope]['numParams'] + 1
+
+def p_more_params(p):
+  '''more_params : ',' type ID more_params 
+                 | empty'''
+  if len(p) > 2:
+    dir_func[actual_scope]['scope'][p[3]] = {'type' : p[2]}
+    dir_func[actual_scope]['numParams'] = dir_func[actual_scope]['numParams'] + 1
+
+def p_main_block(p):
+  '''main_block : main_block1 block '}' '''
+
+def p_main_block1(p):
+  '''main_block1 : PR_MAIN '{' '''
+  global actual_scope
+  actual_scope = p[1]
+  dir_func[p[1]] = {'type' : 'VOID', 'scope' : {}}
+  updateQuad(0,'result', contQuads)
 
 def p_log_op(p):
     '''log_op : PR_AND
-              | PR_OR
-              | PR_NOT '''
+              | PR_OR '''
+    if len(p) > 1:
+        add_pOper(p[1])
+        #print(pOper)
+
+def p_loop(p):
+  '''loop : loop1 loop2 loop3'''
+  fin = pop_pJumps()
+  inicio = pop_pJumps()
+  iterator = pop_pIterator()
+  add_quad('+',iterator,1,iterator)
+  add_quad('GOTO', '','',inicio)
+  global contQuads
+  updateQuad(fin,'result',contQuads)
+  add_quad('=','',1,iterator)
+
+def p_loop1(p):
+  '''loop1 : PR_REPEAT'''
+  add_pJumps(contQuads)
+  nextT = nextTemp('INT')
+  add_pIterator('(' + str(nextT) + ')')
+  memoria[nextT] = 1
+
+def p_loop2(p):
+  '''loop2 : '(' exp ')' '''
+  exp_type = pop_pType()
+  if exp_type == 'INT':
+    resultado = pop_pilaO()
+    nextT = nextTemp('BOOL')
+    memoria[nextT]= False
+    iterator = top_pIterator()
+    add_quad('<=', iterator, resultado,'(' + str(nextT) + ')')
+    add_quad('GOTOF','(' + str(nextT) + ')','','')
+    global contQuads
+    add_pJumps(contQuads - 1)
+  else:
+    print('Error de tipo en ciclo')
+    sys.exit()
+
+def p_loop3(p):
+  '''loop3 : '{' block '}' '''
 
 def p_rel_op(p):
     '''rel_op : '<'
@@ -542,28 +585,83 @@ def p_rel_op(p):
               | EQ
               | NEQ '''
 
-def p_loop(p):
-    '''loop : PR_REPEAT '(' mega_exp ')' '{' more_bloques '}' '''
+def p_block(p):
+  '''block : estructura block '''
 
+def p_estructura(p):
+  '''estructura : assignation 
+                | loop 
+                | cond
+                | return 
+                | func_call 
+                | dec_var '''
 
-def p_cond(p):
-  '''cond : cond1 cond2'''
-
-def p_cond1(p):
-  '''cond1 : PR_IF '(' mega_exp ')' '{' '''
-
-def p_cond2(p):
-  '''cond2 : more_bloques '}' maybe_else'''
-
-def p_maybe_else(p):
-  '''maybe_else : check_else do_else 
-                | empty'''
+def p_func_call(p):
+  '''func_call : func_call1 func_call2
+              | PR_calculaRegresion '(' exp ')'
+              | PR_prediceResultado '(' exp ')'
+              | PR_calculaModa '(' exp ')'
+              | PR_calculaMediana '(' exp ')'
+              | PR_calculaMedia '(' exp ')' 
+              | PR_calculaPoisson '(' exp ')'
+              | PR_calculaBinomial '(' exp ')'
+              | PR_calculaNormal '(' exp ')' '''
   
-def p_checkElse(p):
-  '''check_else : PR_ELSE '{' '''
+def p_func_call1(p):
+  '''func_call1 : ID TO_PARABRE'''
+  if p[1] in dir_func:
+    add_quad('ERA','',p[1],'')
+    global funcToCall
+    funcToCall = p[1]
+  else:
+    print('Error, la funcion ' + p[1] + ' no existe')
+    sys.exit()  
 
-def p_do_else(p):
-  '''do_else : more_bloques '}' '''
+def p_func_call2(p):
+  '''func_call2 : param_vals TO_PARCIERRA'''
+  global contParam
+  if contParam == dir_func[funcToCall].get('numParams'):
+    add_quad('GOSUB',funcToCall,'','')
+    if dir_func[funcToCall].get('type') != 'VOID':
+      nextT = nextTemp(dir_func[funcToCall].get('type'))
+      add_quad('=','',funcToCall,'(' + str(nextT) + ')') 
+      memoria[nextT] = 0
+      add_pilaO('(' + str(nextT) + ')')
+      add_pType(dir_func[funcToCall].get('type'))
+    contParam = 0
+  else:
+    print('Error en el numero de parametros de ' + funcToCall)
+    sys.exit()
+
+def p_param_vals(p):
+  '''param_vals : un_param more_param_vals 
+                | empty'''
+
+def p_more_param_vals(p):
+  '''more_param_vals : ',' un_param more_param_vals 
+                     | empty'''
+
+def p_un_param(p):
+  '''un_param : ID ':' mega_exp'''
+  global funcToCall
+  val = pop_pilaO()
+  valType = pop_pType()
+  funcTable = dir_func[funcToCall]
+  try:
+    result = semantic_check(funcTable['scope'][p[1]].get('type'),valType, '=')
+  except KeyError:
+    print('Error parametro ' + p[1] + ' no existe para la funcion ' + funcToCall )
+    sys.exit()
+  if result != 'error':
+    global contParam
+    contParam = contParam + 1
+    #print('Aqui es memoria')
+
+    add_quad('PARAM', val, '',funcToCall + ':' + p[1])
+
+  else:
+    print('Error de tipo al enviar parametro ' + p[1])
+    sys.exit()
 
 def p_return(p):
     '''return : PR_RETURN mega_exp '''
@@ -576,54 +674,43 @@ def p_return(p):
         print('Error de tipo al retornar en la funcion ' + actual_scope)
         sys.exit()
 
-def p_lecture(p):
-    '''lecture : PR_READ ARR ID index '''
-
-def p_writing(p):
-    '''writing : PR_PRINT '(' mega_exp ')' '''
-
-def p_func_pred(p):
-    '''func_pred : PR_calculaRegresion '(' exp ')'
-                 | PR_prediceResultado '(' exp ')'
-                 | PR_calculaModa '(' exp ')'
-                 | PR_calculaMediana '(' exp ')'
-                 | PR_calculaMedia '(' exp ')' 
-                 | PR_calculaPoisson '(' exp ')'
-                 | PR_calculaBinomial '(' exp ')'
-                 | PR_calculaNormal '(' exp ')' '''
-
-def p_call(p):
-    '''call : call_1 call_2 
-            | func_pred '''
 
 
+def p_cond(p):
+  '''cond : cond1 cond2'''
 
-def p_call_1(p):
-  '''call_1 : ID '(' ''' 
-  if p[1] in dir_func:
-    add_quad('ERA','',p[1],'')
-    global funcToCall
-    funcToCall = p[1]
+def p_cond1(p):
+  '''cond1 : PR_IF '(' mega_exp ')' '{' '''
+  exp_type = pop_pType()
+  if exp_type == 'BOOL':
+    global contQuads
+    resultado = pop_pilaO()
+    add_quad('GOTOF', resultado, '', '')
+    add_pJumps(contQuads - 1)
   else:
-      print('Error la funcion ' + p[1] + ' no existe')
-      sys.exit()
+    print('Error de tipo en IF.')
+    sys.exit()
 
-def p_call_2(p):
-  '''call_2 : exp ')' '''
-  global contParam
-  if contParam == dir_func[funcToCall].get('numParams'):
-    add_quad('GOSUB',funcToCall,'','')
-    if dir_func[funcToCall].get('type') != 'VOID':
-        nextT = nextTemp(dir_func[funcToCall].get('type'))
-        add_quad('=','',funcToCall,'(' + str(nextT) + ')') 
-        memoria[nextT] = 0
-        add_pilaO('(' + str(nextT) + ')')
-        add_pType(dir_func[funcToCall].get('type'))
-    contParam = 0
-  else:
-      print('Error en el numero de parametros de ' + funcToCall)
-      sys.exit()
+def p_cond2(p):
+  '''cond2 : block '}' maybe_else'''
+  fin = pop_pJumps()
+  global contQuads
+  updateQuad(fin,'result',contQuads)
 
+def p_maybe_else(p):
+  '''maybe_else : check_else do_else 
+                | empty'''
+  
+def p_check_else(p):
+  '''check_else : PR_ELSE '{' '''
+  add_quad('GOTO','','','')
+  falso = pop_pJumps()
+  global contQuads
+  add_pJumps(contQuads - 1)
+  updateQuad(falso,'result',contQuads)
+
+def p_do_else(p):
+  '''do_else : block '}' '''
 
 #######################################################
 def p_mega_exp(p):
@@ -677,7 +764,6 @@ def p_opt_rel(p):
     '''opt_rel : rel_op exp
                | empty'''
     top = top_pOper()
-  
     if top == '>' or top == '<' or top == '>=' or top == '<=' or top == '/=' or top == '==':
         rightOperand = pop_pilaO()
         R_OP_type = pop_pType()
@@ -736,9 +822,7 @@ def p_termino(p):
     leftOperand = pop_pilaO()
     L_OP_type = pop_pType()
     operator = pop_pOper()
-
     result_type = semantic_check(L_OP_type, R_OP_type, operator)
-
     if result_type != 'error':
       nextT = nextTemp(result_type)
       #cont de termporales
@@ -749,28 +833,23 @@ def p_termino(p):
       #for q in quad: print q
       #print(pType)
     else:
-      print('Error de tipo en una multiplicacion o division')
+      print('Error de tipo en una operación.')
       sys.exit()
     
 
-def p_another_termino(p)
-'''another_termino : '*' termino
-                   | '/' termino 
-                   | empty '''
-if len(p) > 2:
-    add_pOper(p[1])                   
+def p_another_termino(p):
+  '''another_termino : '*' termino
+                     | '/' termino 
+                     | '%' termino
+                     | empty '''
+  if len(p) > 2:
+      add_pOper(p[1])                   
  
 
-
-
 def p_factor(p): 
-    '''factor : '(' super_exp ')'
-              | '+' var_cte
-              | '-' var_cte
-              | var_cte '''
-
-def p_main(p):
-    '''main : PR_MAIN '{' more_vars more_bloques '}' '''
+    '''factor : '(' mega_exp ')'
+              | func_call
+              | value '''
 
 def p_empty(p):
     '''empty : '''
@@ -781,6 +860,7 @@ def p_error(p):
     aprobado = False
     print("Error de sintaxis en '%s'" % p.value)
     sys.exit()
+
 ###############################################################################
 ########## Test ##########
 fName = input("Enter file name: ")
