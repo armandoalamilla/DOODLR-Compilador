@@ -1,0 +1,15 @@
+PROG{
+	
+	VAR NUM numero
+	VAR NUM res = 0
+	VAR NUM temp
+	MAIN {
+		numero = 5
+		LOOP(numero) {
+			temp = numero * numero
+			res = res + temp
+			numero = numero - 1
+		}
+		PRINT(res)
+	}
+}

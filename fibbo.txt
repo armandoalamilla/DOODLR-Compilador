@@ -1,0 +1,19 @@
+PROG{
+    
+    VAR INT t1 = 0
+    VAR INT t2 = 1
+    VAR INT nextTerm = 0
+    VAR INT n = 5
+
+    // Despliega los primeros 2 numeros puesto que siempre son 0 y 1
+    PRINT(t1)
+    PRINT(t2)
+    nextTerm = t1 + t2;
+
+    LOOP(nextTerm <= n) {
+        PRINT(nextTerm)
+        t1 = t2
+        t2 = nextTerm
+        nextTerm = t1 + t2
+    }
+}
