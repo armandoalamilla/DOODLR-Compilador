@@ -594,7 +594,8 @@ def p_estructura(p):
                 | cond
                 | return 
                 | func_call 
-                | dec_var '''
+                | dec_var 
+                | write '''
 
 def p_func_call(p):
   '''func_call : func_call1 func_call2
@@ -607,13 +608,15 @@ def p_func_call(p):
               | PR_calculaBinomial '(' exp ')'
               | PR_calculaNormal '(' exp ')' '''
 
+def p_write(p):
+    '''write : PR_PRINT '(' super_exp cwr_action ')' '''
 
-
-
-
-
-              
-  
+# Cuadruplo de write
+def p_cwr_action(p):
+    '''cwr_action : '''
+    rightOperand = pop_pilaO()
+    add_quad('PRINT', rightOperand,'','')
+   
 def p_func_call1(p):
   '''func_call1 : ID TO_PARABRE'''
   if p[1] in dir_func:
@@ -927,3 +930,13 @@ if aprobado == True:
 else: 
     print("NO aprobado")
     sys.exit()
+
+
+
+
+
+elif instruction_action == 'PRINT':
+                left_operand = current_memory.get_value(left_operand_address)
+
+                print(str(left_operand))
+                self.number_of_current_instruction += 1
