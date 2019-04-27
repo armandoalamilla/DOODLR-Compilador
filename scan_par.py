@@ -606,6 +606,13 @@ def p_func_call(p):
               | PR_calculaPoisson '(' exp ')'
               | PR_calculaBinomial '(' exp ')'
               | PR_calculaNormal '(' exp ')' '''
+
+
+
+
+
+
+              
   
 def p_func_call1(p):
   '''func_call1 : ID TO_PARABRE'''
@@ -860,6 +867,35 @@ def p_error(p):
     aprobado = False
     print("Error de sintaxis en '%s'" % p.value)
     sys.exit()
+
+def retrieveValueAt(address):  
+  if not isinstance(address,basestring):
+    return address
+  if address[0]=='(':
+    address = int(address[1:len(address)-1])
+  else:
+    for func in dir_func:
+      if address in dir_func.get(func).get('scope').keys():
+        address = dir_func.get(func).get('scope').get(address).get('address')
+  if not address in memoria.keys():
+    print(str(address)+' '+str(currentQuad))
+    print('Variable no inicializada')
+    sys.exit()
+  return memoria.get(address)
+
+def translateString(address):
+  if not isinstance(address,basestring):
+    return address
+  if address[0]=='(':
+    address = int(address[1:len(address)-1])
+  else:
+    for func in dir_func:
+      if address in dir_func.get(func).get('scope').keys():
+        address = dir_func.get(func).get('scope').get(address).get('address')
+  if not address in memoria.keys():
+    print('Variable no inicializada')
+    sys.exit()
+  return address
 
 ###############################################################################
 ########## Test ##########
