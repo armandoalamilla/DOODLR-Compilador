@@ -316,6 +316,7 @@ reserved = {
  'AND'     : 'PR_AND',
  'OR'      : 'PR_OR',
  'NOT'     : 'PR_NOT',
+ 'ARR'     : 'PR_ARREGLO',
 
 }
 
@@ -375,6 +376,14 @@ lexer = lex.lex()
 ########## Parser ##########
 def p_programa(p):
     '''programa : PR_PROGRAM '{' declarations main '}' '''
+    print(dir_func)
+    #for q in quad: print q
+    #print(dir_func.get('move'))
+    a = 0
+    for q in quad:
+      #print a
+      rint(q)
+      a = a + 1
 
 def p_value(p):
     '''value : CTEI
@@ -382,29 +391,60 @@ def p_value(p):
              | CTES
              | PR_TRUE
              | PR_FALSE
-             | ID'''
-    if p[1] == 'TRUE':
-        add_pType('BOOL')
-        add_pilaO(True)
+             | ID
+             | PR_ARREGLO first_index second_index ']' '''
+    if len(p) > 2:
+      arreglo = pop_pArr()
+      varscope = ''
+      try:
+        dimensiones = dir_func[actual_scope]['scope'][arreglo.get('name')]['dim']
+        varscope = actual_scope
+      except KeyError:
+        dimensiones = dir_func['global']['scope'][arreglo.get('name')]['dim']
+        varscope = 'global'
+      else:
+        print("Error la variable no existe")
+        sys.exit()
+
+      if arreglo.get('currentDim') != len(dimensiones) and len(dimensiones)!=1:
+        print('Error, faltan dimensiones en el arreglo')
+        sys.exit()
+
+      nextT = nextTemp('NUM')
+      memoria[nextT]= 0
+      temp1 = '(' + str(nextT) + ')'
+      aux = pop_pilaO()
+      rand = pop_pType()
+      add_quad('+', aux, dimensiones[len(dimensiones)-1].get('Val'),temp1)
+      nextT = nextTemp('NUM')
+      memoria[nextT]= 0
+      temp2 = '[' + str(nextT) + ']'
+      myMem = varscope+'/'+arreglo.get('name')
+      add_quad('DIRBASE',temp1,myMem,temp2)
+      add_pilaO(temp2)
+      add_pType(dir_func[varscope]['scope'][arreglo.get('name')].get('type'))
+    elif p[1] == 'TRUE':
+      add_pType('BOOL')
+      add_pilaO(True)
     elif p[1] == 'FALSE':
-        add_pType('BOOL')
-        add_pilaO(False)
+      add_pType('BOOL')
+      add_pilaO(False)
     elif not is_number(p[1]):
-        try:
-            varscope = dir_func[actual_scope]['scope'][p[1]]
-        except KeyError:
-            varscope = dir_func['global']['scope'][p[1]]
-            add_pilaO(p[1])
-            add_pType(varscope.get('type'))
-        else:
-            add_pilaO(p[1])
-            add_pType(varscope.get('type'))
+      try:
+        varscope = dir_func[actual_scope]['scope'][p[1]]
+      except KeyError:
+        varscope = dir_func['global']['scope'][p[1]]
+        add_pilaO(p[1])
+        add_pType(varscope.get('type'))
+      else:
+        add_pilaO(p[1])
+        add_pType(varscope.get('type'))
     elif float(p[1]) % 1 != 0:
-        add_pType('FLOAT')
-        add_pilaO(float(p[1]))
+      add_pType('FLOT')
+      add_pilaO(float(p[1]))
     else:
-        add_pType('INT')
-        add_pilaO(int(p[1]))
+      add_pType('NUM')
+      add_pilaO(int(p[1]))
 
 def p_declarations(p):
     '''declarations : dec_var dec_func'''
@@ -418,23 +458,78 @@ def p_dec_func(p):
                 | empty '''
 
 def p_var(p):
-    '''var : PR_VAR type ID index'''
-    if not p[3] in dir_func[actual_scope]['scope']:
-      varAddress = 0
-      if actual_scope == 'global':
-        varAddress = nextGlobal(p[2])
-        dir_func[actual_scope]['scope'][p[3]] = {'type' : p[2], 'address':varAddress}
+  '''var : var1 array_create'''
+  if actual_scope == 'global':
+    varAddress = nextGlobal(dir_func[actual_scope]['scope'][p[1]].get('type'))
+    dir_func[actual_scope]['scope'][p[1]]['address'] = varAddress
+    memoria[varAddress] = 0
+    if p[2] == 1:
+      cant = 1
+      for i in dir_func[actual_scope]['scope'][p[1]]['dim']:
+        cant = cant * i.get('Lim')
+      for i in range(cant-1):
+        varAddress = nextGlobal(dir_func[actual_scope]['scope'][p[1]].get('type'))
         memoria[varAddress] = 0
-      else:
-        dir_func[actual_scope]['scope'][p[3]] = {'type' : p[2]}
-    else:
-      print('Variable ' + p[3] + ' ya declarada')
-      sys.exit()
 
-def p_index(p):
-    '''index : '[' CTEI ']'
-             | '[' CTEI ']' '[' CTEI ']'
-             | empty '''
+# Regla que da de alta una variable, en caso de ya estar declarada muestra el error
+def p_var1(p):
+  '''var1 :  PR_VAR type ID'''
+  if not p[3] in dir_func[actual_scope]['scope']:
+    varAddress = 0
+    dir_func[actual_scope]['scope'][p[3]] = {'type' : p[2], 'address':123,'dim' : []}
+    p[0] = p[3]
+    global toDim
+    toDim = p[3]
+  else:
+    print('Variable ' + p[3] + ' ya declarada')
+    sys.exit()
+
+  
+
+# Regla para crear arreglos con x numero de dimensiones,
+# Agrega el arreglo asi como sus calculos correspondientes
+def p_array_create(p):
+  '''array_create : first_dim second_dim TO_CORCIERRA 
+                  | empty'''
+  if len(p) > 2:
+    mDim = 0
+    Suma = 0
+    global R
+    for i in range(0, len(dir_func[actual_scope]['scope'][toDim]['dim'])):
+      mDim = R / (dir_func[actual_scope]['scope'][toDim]['dim'][i].get('Lim'))
+      R = mDim
+      Suma = Suma + mDim
+      if i < len(dir_func[actual_scope]['scope'][toDim]['dim']) -1 :
+        dir_func[actual_scope]['scope'][toDim]['dim'][i]['Val'] = mDim
+      else:
+        dir_func[actual_scope]['scope'][toDim]['dim'][i]['Val'] = Suma * -1
+    p[0] = 1
+
+  else:
+    p[0] = 0
+
+
+#agrega arreglo al directorio junto con sus dimensiones
+def p_first_dim(p):
+  '''first_dim : TO_CORABRE CTEI'''
+  dicAux = {'Lim' : int(p[2]), 'Val' : 0}
+  dir_func[actual_scope]['scope'][toDim]['dim'].append(dicAux)
+  global R
+  R = R * int(p[2])
+
+
+def p_second_dim(p):
+  '''second_dim : unaDimCreate second_dim
+                | empty'''
+  
+
+def p_unaDimCreate(p):
+  '''unaDimCreate : ',' CTEI '''
+  if len(p) > 2:
+    dicAux = {'Lim' : int(p[2]), 'Val' : 0}
+    dir_func[actual_scope]['scope'][toDim]['dim'].append(dicAux)
+    global R
+    R = R * int(p[2])
 
 def p_type(p):
     '''type : PR_INT
@@ -444,37 +539,178 @@ def p_type(p):
     p[0] = p[1]
 
 def p_assignation(p):
-    '''assignation : assignTo '=' mega_exp'''
+    '''assignation : assign_to '=' mega_exp'''
     varia = p[1]
     rightOperand = pop_pilaO()
-    R_OP_type = pop_pType()
-    try:
-        varscope = dir_func[actual_scope]['scope'][varia]
-    except KeyError:
-        varscope = dir_func['global']['scope'][varia]
-        result_check = semantic_check(varscope.get('type'),R_OP_type,'=')
+    rOP_type = pop_pType()
+    if varia[0] == '[':
+      arreglo = pop_pArr()
+      try:
+        varscope = dir_func[actual_scope]['scope'][arreglo.get('name')]
+        if arreglo.get('currentDim') != len(dimensiones) and len(dimensiones)!=1: 
+          print('Error, faltan dimensiones en el arreglo')
+          sys.exit()
+        result_check = semantic_check(varscope.get('type'),rOP_type,'=')
         if result_check != 'error':
-            add_quad('=','',rightOperand,varia)
+          add_quad('=','',rightOperand, varia)
         else:
-            print("Error de tipos al asignar")
-            sys.exit()
+          print("Error de tipos al asignar")
+          sys.exit()
+      except KeyError:
+        varscope = dir_func['global']['scope'][arreglo.get('name')]
+        result_check = semantic_check(varscope.get('type'),rOP_type,'=')
+        if result_check != 'error':
+          add_quad('=','',rightOperand, varia)
+        else:
+          print("Error de tipos al asignar")
+          sys.exit()
+      else:
+        print('Error, la variable no existe en el scope')
+        sys.exit()
     else:
-        result_check = semantic_check(varscope.get('type'),R_OP_type,'=')
+      try:
+        varscope = dir_func[actual_scope]['scope'][varia]
+      except KeyError:
+        varscope = dir_func['global']['scope'][varia]
+        result_check = semantic_check(varscope.get('type'),rOP_type,'=')
         if result_check != 'error':
-            add_quad('=','',rightOperand,varia)
+          add_quad('=','',rightOperand,varia)
         else:
-            print("Error de tipos al intentar asignar.")
-            sys.exit()
-   
-def p_assignTo(p):
-  '''assignTo : ID other_index'''
-  p[0] = p[1]
+          print("Error de tipos al asignar")
+          sys.exit()
+      else:
+        result_check = semantic_check(varscope.get('type'),rOP_type,'=')
+        if result_check != 'error':
+          add_quad('=','',rightOperand,varia)
+        else:
+          print("Error de tipos al asignar")
+          sys.exit()
 
-def p_other_index(p):
-    '''other_index : '[' exp ']'
-                   | '[' exp ']' '[' exp ']'
-                   | empty '''
- 
+def p_assign_to(p):
+  '''assign_to : ID 
+               | PR_ARREGLO first_index second_index ']' '''
+  if len(p) > 2:
+    arreglo = top_pArr()
+    varscope = ''
+    try:
+      dimensiones = dir_func[actual_scope]['scope'][arreglo.get('name')]['dim']
+      varscope = actual_scope
+    except KeyError:
+      dimensiones = dir_func['global']['scope'][arreglo.get('name')]['dim']
+      varscope = 'global'
+    else:
+      print("Error la variable no existe")
+      sys.exit()
+
+    nextT = nextTemp('NUM')
+    memoria[nextT]= 0
+    temp1 = '(' + str(nextT) + ')'
+    aux = pop_pilaO()
+    rand = pop_pType()
+    add_quad('+', aux, dimensiones[len(dimensiones)-1].get('Val'),temp1)
+    nextT = nextTemp('NUM')
+    memoria[nextT]= 0
+    temp2 = '[' + str(nextT) + ']'
+    myMem = varscope+'/'+arreglo.get('name')
+    add_quad('DIRBASE',temp1,myMem,temp2)
+    add_pilaO(temp2)
+    add_pType(dir_func[varscope]['scope'][arreglo.get('name')].get('type'))
+    p[0] = temp2
+
+  else:
+    p[0] = p[1]
+
+
+def p_first_index(p):
+  '''first_index : ID '[' exp'''
+  varscope = ''
+  try:
+    dimensiones = dir_func[actual_scope]['scope'][p[1]]['dim']
+    varscope = actual_scope
+  except KeyError:
+    dimensiones = dir_func['global']['scope'][p[1]]['dim']
+    varscope = 'global'
+  else:
+    print("Error la variable no existe")
+    sys.exit()
+  if len(dimensiones) > 0:
+    add_pArr( {'name':p[1],'currentDim':1} )
+    index = pop_pilaO()
+    indexType = pop_pType()
+    result_type = semantic_check(indexType, 'NUM', '=')
+    if result_type != 'error':
+      add_quad('VER',index, dimensiones[0].get('Lim'),'')
+      if len(dimensiones) > 1:
+        nextT = nextTemp('NUM')
+        memoria[nextT]= 0
+        temp1 = '(' + str(nextT) + ')'
+        add_quad('*', index, dimensiones[0].get('Val'),temp1)
+        add_pilaO(temp1)
+        add_pType('NUM')
+      else:
+        add_pType(indexType)
+        add_pilaO(index)
+    else:
+      print('Error, usa un NUM para el indice de un arreglo')
+      sys.exit()
+  else:
+    print('Error, la variable '+p[1]+' no es dimensionada')
+    sys.exit()
+
+def p_second_index(p):
+  '''second_index : unaDim second_index
+                  | empty'''
+
+# regla para mas de una dimension en arreglo
+# reviza que los tipos y los numeros de dimensiones
+# sean correctos 
+def p_unaDim(p):
+  '''unaDim : ',' exp'''
+  if len(p) > 2:
+    varscope = ''
+    arreglo = top_pArr()
+    try:
+      dimensiones = dir_func[actual_scope]['scope'][arreglo.get('name')]['dim']
+      varscope = actual_scope
+    except KeyError:
+      dimensiones = dir_func['global']['scope'][arreglo.get('name')]['dim']
+      varscope = 'global'
+    else:
+      print("Error la variable no existe")
+      sys.exit()
+    index = pop_pilaO()
+    indexType = pop_pType()
+    result_type = semantic_check(indexType, 'NUM', '=')
+    if result_type != 'error':
+      add_quad('VER',index, dimensiones[arreglo.get('currentDim')].get('Lim'),'')
+      if arreglo.get('currentDim') < len(dimensiones)-1:
+        nextT = nextTemp('NUM')
+        memoria[nextT]= 0
+        temp1 = '(' + str(nextT) + ')'
+        add_quad('*', index, dimensiones[arreglo.get('currentDim')].get('Val'),temp1)
+        add_pilaO(temp1)
+        add_pType('NUM')
+      else:
+        add_pilaO(index)
+        add_pType(indexType)
+      nextT = nextTemp('NUM')
+      memoria[nextT]= 0
+      temp1 = '(' + str(nextT) + ')'
+      aux1 = pop_pilaO()
+      aux2 = pop_pilaO()
+      random = pop_pType()
+      random = pop_pType()
+      add_quad('+', aux1, aux2, temp1)
+      add_pilaO(temp1)
+      add_pType('NUM')
+      auxArreglo = pop_pArr()
+      auxArreglo['currentDim'] = auxArreglo.get('currentDim') + 1
+      add_pArr(auxArreglo) 
+    else:
+      print('Error, usa un NUM para el indice de un arreglo')
+      sys.exit()
+
+
 def p_func(p):
   '''func : func1 func2'''
 
@@ -484,17 +720,16 @@ def p_func1(p):
 def p_func1_1(p):
   '''func1_1 : PR_FUNCTION func_type ID '(' '''
   if not p[3] in dir_func:
-      global actual_scope
-      if p[2] != 'VOID':
-          varAddress = nextGlobal(p[2])
-          dir_func['global']['scope'][p[3]] = {'type' : p[2], 'address':varAddress }
-          memoria[varAddress] = 0
-
-      actual_scope = p[3]
-      dir_func[p[3]] = { 'type' : p[2], 'scope' : {}, 'numParams' : 0, 'quadStart' : contQuads }
+    global actual_scope
+    if p[2] != 'VOID':
+      varAddress = nextGlobal(p[2])
+      dir_func['global']['scope'][p[3]] = {'type' : p[2], 'address':varAddress }
+      memoria[varAddress] = 0
+    actual_scope = p[3]
+    dir_func[p[3]] = { 'type' : p[2], 'scope' : {}, 'numParams' : 0, 'quadStart' : contQuads }
   else:
-      print("Funcion "+ p[3] +" ya declarada.")
-      sys.exit()
+    print("Funcion " + p[3] +" ya declarada")
+    sys.exit()
 
 
 def p_func1_2(p):
@@ -584,9 +819,12 @@ def p_rel_op(p):
               | GE
               | EQ
               | NEQ '''
+    if len(p) > 1:
+      add_pOper(p[1])
 
 def p_block(p):
-  '''block : estructura block '''
+  '''block : estructura block
+           | empty '''
 
 def p_estructura(p):
   '''estructura : assignation 
@@ -607,6 +845,7 @@ def p_func_call(p):
               | PR_calculaPoisson '(' exp ')'
               | PR_calculaBinomial '(' exp ')'
               | PR_calculaNormal '(' exp ')' '''
+###############DUDAS AQUI#######################3
 
 def p_write(p):
     '''write : PR_PRINT '(' super_exp cwr_action ')' '''
@@ -687,7 +926,8 @@ def p_return(p):
 
 
 def p_cond(p):
-  '''cond : cond1 cond2'''
+  '''cond : cond1 cond2
+          | empty'''
 
 def p_cond1(p):
   '''cond1 : PR_IF '(' mega_exp ')' '{' '''
@@ -871,34 +1111,61 @@ def p_error(p):
     print("Error de sintaxis en '%s'" % p.value)
     sys.exit()
 
-def retrieveValueAt(address):  
+# Funcion que basado en un numero
+# de direccion de memoria regresa
+# el valor correspondiente
+def retrieveValueAt(address):
+  
   if not isinstance(address,basestring):
     return address
+
   if address[0]=='(':
     address = int(address[1:len(address)-1])
+
+  elif address[0] == '[':
+    address = retrieveValueAt( ( address.replace('[','(') ).replace(']',')') )
+
   else:
     for func in dir_func:
       if address in dir_func.get(func).get('scope').keys():
         address = dir_func.get(func).get('scope').get(address).get('address')
+
   if not address in memoria.keys():
     print(str(address)+' '+str(currentQuad))
     print('Variable no inicializada')
     sys.exit()
+  
   return memoria.get(address)
 
+# Funcion que transforma un string (1800)
+# en un numero 1800 para que pueda ser accesado
+# el valor correspondiente
+
 def translateString(address):
+  
   if not isinstance(address,basestring):
     return address
+
   if address[0]=='(':
     address = int(address[1:len(address)-1])
+
+  elif address[0]=='[':
+    address = retrieveValueAt( ( address.replace('[','(') ).replace(']',')') )
+
   else:
     for func in dir_func:
       if address in dir_func.get(func).get('scope').keys():
         address = dir_func.get(func).get('scope').get(address).get('address')
+
   if not address in memoria.keys():
+    for r in memoria:
+      print (str(r)+':'+str(memoria.get(r)))
+    print(address)
     print('Variable no inicializada')
     sys.exit()
+  
   return address
+
 
 ###############################################################################
 ########## Test ##########
