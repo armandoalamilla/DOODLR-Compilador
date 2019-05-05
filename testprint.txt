@@ -1,0 +1,10 @@
+PROGRAM{
+
+	MAIN{
+
+		PRINT(28*1)
+
+		#uwu
+
+	}
+}

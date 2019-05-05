@@ -1,15 +1,26 @@
-PROG{
-	
-	VAR NUM numero
-	VAR NUM res = 0
-	VAR NUM temp
+PROGRAM {
+	VAR INT numero
+	VAR INT res
+	VAR INT temp
+	VAR INT iter
+
 	MAIN {
-		numero = 5
-		LOOP(numero) {
-			temp = numero * numero
-			res = res + temp
-			numero = numero - 1
+		numero = 7
+		res = 1
+		iter = 1
+
+		IF(numero == 0) {
+		    PRINT(1)
+		    END
 		}
+
+		LOOP(numero) {
+			res = res * iter
+			iter = iter + 1
+			END
+		}
+
 		PRINT(res)
+		END
 	}
 }
