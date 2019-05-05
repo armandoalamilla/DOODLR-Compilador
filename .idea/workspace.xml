@@ -2,15 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e5cbd9fa-9182-427e-8bdb-ba737a7dd477" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LOOP" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LOOP.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mat.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testprint.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fact.txt" beforeDir="false" afterPath="$PROJECT_DIR$/fact.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fibbo.txt" beforeDir="false" afterPath="$PROJECT_DIR$/fibbo.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/parser.out" beforeDir="false" afterPath="$PROJECT_DIR$/parser.out" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/parsetab.py" beforeDir="false" afterPath="$PROJECT_DIR$/parsetab.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fact_rec.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scan_par.py" beforeDir="false" afterPath="$PROJECT_DIR$/scan_par.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -24,8 +17,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scan_par.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="49">
-              <caret line="1541" column="23" lean-forward="true" selection-start-line="1541" selection-start-column="23" selection-end-line="1541" selection-end-column="23" />
+            <state relative-caret-position="183">
+              <caret line="1166" column="45" lean-forward="true" selection-start-line="1166" selection-start-column="45" selection-end-line="1166" selection-end-column="45" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -36,8 +29,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fact.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" column="18" lean-forward="true" selection-start-line="7" selection-start-column="18" selection-end-line="7" selection-end-column="18" />
+            <state relative-caret-position="85">
+              <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fact_rec.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="85">
+              <caret line="5" column="15" lean-forward="true" selection-start-line="5" selection-start-column="15" selection-end-line="5" selection-end-column="15" />
             </state>
           </provider>
         </entry>
@@ -64,6 +66,15 @@
       <find>NUM</find>
       <find>END</find>
       <find>KAME</find>
+      <find>or</find>
+      <find>PR_UNION</find>
+      <find>opLogico</find>
+      <find>return</find>
+      <find>ret</find>
+      <find>RET</find>
+      <find>RETURN</find>
+      <find>PR_return</find>
+      <find>megaExp</find>
     </findStrings>
     <replaceStrings>
       <replace>INT</replace>
@@ -81,15 +92,16 @@
         <option value="$PROJECT_DIR$/LOOP.txt" />
         <option value="$PROJECT_DIR$/testprint.txt" />
         <option value="$PROJECT_DIR$/fibbo.txt" />
-        <option value="$PROJECT_DIR$/scan_par.py" />
         <option value="$PROJECT_DIR$/fact.txt" />
+        <option value="$PROJECT_DIR$/scan_par.py" />
+        <option value="$PROJECT_DIR$/fact_rec.txt" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
-    <option name="width" value="977" />
-    <option name="height" value="1038" />
+    <option name="x" value="-9" />
+    <option name="width" value="978" />
+    <option name="height" value="1039" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -114,7 +126,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/test" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunDashboard">
@@ -202,9 +214,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/prueba1.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/fibbo.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -219,17 +228,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/prueba1.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fact_rec.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="15" lean-forward="true" selection-start-line="5" selection-start-column="15" selection-end-line="5" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/fact.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="18" lean-forward="true" selection-start-line="7" selection-start-column="18" selection-end-line="7" selection-end-column="18" />
+        <state relative-caret-position="85">
+          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scan_par.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="49">
-          <caret line="1541" column="23" lean-forward="true" selection-start-line="1541" selection-start-column="23" selection-end-line="1541" selection-end-column="23" />
+        <state relative-caret-position="183">
+          <caret line="1166" column="45" lean-forward="true" selection-start-line="1166" selection-start-column="45" selection-end-line="1166" selection-end-column="45" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>

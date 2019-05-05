@@ -1042,7 +1042,7 @@ def p_unParam(p):
 
 
 def p_return(p):
-    'return : PR_return megaExp'
+    '''return : PR_return megaExp'''
     rightOperand = pop_pilaO()
     rOP_type = pop_pType()
     result_type = semantic_check(dir_func[actual_scope].get('type'), rOP_type, '=')
@@ -1536,7 +1536,7 @@ def maqVirtual():
 
 parser = yacc.yacc()
 
-fName = "fact.txt"
+fName = "fact_rec.txt"
 
 with open(fName, 'r') as myfile:
 	s = myfile.read().replace('\n', '')

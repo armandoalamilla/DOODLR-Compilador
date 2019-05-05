@@ -1,0 +1,18 @@
+PROGRAM {
+	FUNC INT fact(INT n){
+		IF(n<=1){
+			RET 1
+			END
+		}ELSE {
+			RET fact(n:n-1)*n
+			END
+		}
+		END
+	}
+	MAIN{
+		VAR INT res
+		res = fact(n:4)
+		PRINT(res)
+		END
+	}
+}
