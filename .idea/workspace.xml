@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e5cbd9fa-9182-427e-8bdb-ba737a7dd477" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/fact_rec.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scan_par.py" beforeDir="false" afterPath="$PROJECT_DIR$/scan_par.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,8 +15,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scan_par.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="183">
-              <caret line="1166" column="45" lean-forward="true" selection-start-line="1166" selection-start-column="45" selection-end-line="1166" selection-end-column="45" />
+            <state relative-caret-position="210">
+              <caret line="1545" lean-forward="true" selection-start-line="1545" selection-end-line="1545" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -93,8 +91,8 @@
         <option value="$PROJECT_DIR$/testprint.txt" />
         <option value="$PROJECT_DIR$/fibbo.txt" />
         <option value="$PROJECT_DIR$/fact.txt" />
-        <option value="$PROJECT_DIR$/scan_par.py" />
         <option value="$PROJECT_DIR$/fact_rec.txt" />
+        <option value="$PROJECT_DIR$/scan_par.py" />
       </list>
     </option>
   </component>
@@ -247,8 +245,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/scan_par.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="183">
-          <caret line="1166" column="45" lean-forward="true" selection-start-line="1166" selection-start-column="45" selection-end-line="1166" selection-end-column="45" />
+        <state relative-caret-position="210">
+          <caret line="1545" lean-forward="true" selection-start-line="1545" selection-end-line="1545" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>
