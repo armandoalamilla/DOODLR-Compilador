@@ -1419,6 +1419,7 @@ def maqVirtual():
             s = np.random.poisson(int(par1), int(par2))
             count, bins, ignored = plt.hist(s, 14, density=True)
             plt.show()
+            currentQuad = currentQuad + 1
         elif operation == 'PRINT':
             left = executeQuad.get('leftOperand')
             print("Console prints: " + str(retrieveValueAt(left)))
