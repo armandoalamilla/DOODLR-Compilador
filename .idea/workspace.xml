@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e5cbd9fa-9182-427e-8bdb-ba737a7dd477" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/parser.out" beforeDir="false" afterPath="$PROJECT_DIR$/parser.out" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/parsetab.py" beforeDir="false" afterPath="$PROJECT_DIR$/parsetab.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scan_par.py" beforeDir="false" afterPath="$PROJECT_DIR$/scan_par.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,8 +15,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scan_par.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="2" lean-forward="true" selection-start-line="6" selection-start-column="2" selection-end-line="6" selection-end-column="2" />
+            <state relative-caret-position="-456">
+              <caret line="1280" column="41" selection-start-line="1280" selection-start-column="41" selection-end-line="1280" selection-end-column="41" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -261,8 +259,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/scan_par.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="2" lean-forward="true" selection-start-line="6" selection-start-column="2" selection-end-line="6" selection-end-column="2" />
+        <state relative-caret-position="-456">
+          <caret line="1280" column="41" selection-start-line="1280" selection-start-column="41" selection-end-line="1280" selection-end-column="41" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>

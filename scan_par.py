@@ -1279,14 +1279,49 @@ def maqVirtual():
             result = translateString(result)
             memoria[result] = leftval + dir_func[cosas[0]]['scope'][cosas[1]].get('address')
             currentQuad = currentQuad + 1
+        elif operation == 'calculaRegresion':
+            right = executeQuad.get('result')
+            # Codigo correspondiente
+
+            currentQuad = currentQuad + 1
+        elif operation == 'calculaResultado':
+            right = executeQuad.get('result')
+            # Codigo correspondiente
+
+            currentQuad = currentQuad + 1
+        elif operation == 'calculaModa':
+            right = executeQuad.get('result')
+            # Codigo correspondiente
+
+            currentQuad = currentQuad + 1
+        elif operation == 'calculaMediana':
+            right = executeQuad.get('result')
+            # Codigo correspondiente
+
+            currentQuad = currentQuad + 1
+        elif operation == 'calculaMedia':
+            right = executeQuad.get('result')
+            # Codigo correspondiente
+
+            currentQuad = currentQuad + 1
         elif operation == 'calculaPoisson':
             right = executeQuad.get('result')
-            f = open(right+".txt", "r")
+            f = open(right + ".txt", "r")
             par1 = f.readline()
             par2 = f.readline()
             s = np.random.poisson(int(par1), int(par2))
             count, bins, ignored = plt.hist(s, 14, density=True)
             plt.show()
+            currentQuad = currentQuad + 1
+        elif operation == 'calculaBinomial':
+            right = executeQuad.get('result')
+            # Codigo correspondiente
+
+            currentQuad = currentQuad + 1
+        elif operation == 'calculaNormal':
+            right = executeQuad.get('result')
+            # Codigo correspondiente
+
             currentQuad = currentQuad + 1
         elif operation == 'PRINT':
             left = executeQuad.get('leftOperand')
