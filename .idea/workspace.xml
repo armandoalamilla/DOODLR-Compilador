@@ -1,20 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e5cbd9fa-9182-427e-8bdb-ba737a7dd477" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/pruebapois.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LOOP" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LOOP.txt" beforeDir="false" afterPath="$PROJECT_DIR$/LOOP.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fact_rec.txt" beforeDir="false" afterPath="$PROJECT_DIR$/fact_rec.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/prueba1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prueba2.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prueba3.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pruebas/prueba1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pruebas/prueba2.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scan_par.py" beforeDir="false" afterPath="$PROJECT_DIR$/scan_par.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testprint.txt" beforeDir="false" />
-    </list>
+    <list default="true" id="e5cbd9fa-9182-427e-8bdb-ba737a7dd477" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
