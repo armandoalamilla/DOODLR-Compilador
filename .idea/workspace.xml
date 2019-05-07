@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e5cbd9fa-9182-427e-8bdb-ba737a7dd477" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/parser.out" beforeDir="false" afterPath="$PROJECT_DIR$/parser.out" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/parsetab.py" beforeDir="false" afterPath="$PROJECT_DIR$/parsetab.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scan_par.py" beforeDir="false" afterPath="$PROJECT_DIR$/scan_par.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -15,8 +17,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scan_par.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="248">
-              <caret line="1421" column="12" selection-start-line="1421" selection-start-column="12" selection-end-line="1421" selection-end-column="41" />
+            <state relative-caret-position="102">
+              <caret line="6" column="2" lean-forward="true" selection-start-line="6" selection-start-column="2" selection-end-line="6" selection-end-column="2" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -55,19 +57,11 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>PRINT</find>
-      <find>LEX</find>
-      <find>print(dir</find>
-      <find>action</find>
-      <find>&lt;=</find>
-      <find>console</find>
-      <find>UWU</find>
       <find>uwu</find>
       <find>TO_NUM</find>
       <find>kame</find>
       <find>TO_FLO</find>
       <find>TO_flo</find>
-      <find>num</find>
       <find>NUM</find>
       <find>END</find>
       <find>KAME</find>
@@ -85,6 +79,14 @@
       <find>calculaModa</find>
       <find>calcula</find>
       <find>count</find>
+      <find>num</find>
+      <find>flot</find>
+      <find>gNum</find>
+      <find>bool</find>
+      <find>tNum</find>
+      <find>chorizo</find>
+      <find>BOOL</find>
+      <find>DIGIT</find>
     </findStrings>
     <replaceStrings>
       <replace>INT</replace>
@@ -179,9 +181,9 @@
     <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.11764706" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.11764706" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Terminal" order="0" visible="true" weight="0.32577905" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="0" visible="true" weight="0.32577905" />
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="2" />
       <window_info anchor="bottom" id="Message" order="3" />
@@ -259,8 +261,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/scan_par.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="248">
-          <caret line="1421" column="12" selection-start-line="1421" selection-start-column="12" selection-end-line="1421" selection-end-column="41" />
+        <state relative-caret-position="102">
+          <caret line="6" column="2" lean-forward="true" selection-start-line="6" selection-start-column="2" selection-end-line="6" selection-end-column="2" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>
