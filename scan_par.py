@@ -1,13 +1,13 @@
 import ply.lex as lex
 import ply.yacc as yacc
 import sys
+import matplotlib.pyplot as plt
+import numpy as np
 
 # Inicializacion de variables para manejar la tortuga
 
 
-# Inicializacion de diccionarios,variables
-# y listas necesarias para el funcionamiento
-# completo del lenguaje
+# Inicializacion de diccionarios,variables y listas necesarias para el compilador
 aprobado = True
 dir_func = {}
 pOper = []
@@ -943,26 +943,17 @@ def p_estructura(p):
 # del lenguaje para cada operacion
 
 def p_funcCall(p):
-    '''funcCall : funcCall1 funcCall2'''
-    # if len(p) == 5:
-    #     if (p[1] != 'DRAW' and p[1] != 'COLOR'):
-    #         rightOperand = pop_pilaO()
-    #         rOP_type = pop_pType()
-    #         result_check = semantic_check('FLOAT', rOP_type, '=')
-    #         if rightOperand >= 0:
-    #             add_quad(p[1], '', rightOperand, '')
-    #         else:
-    #             print('Error, no se pueden usar numeros negativos para Kame-Chan uwu')
-    #             sys.exit()
-    #
-    #     elif p[1] == 'COLOR':
-    #         add_quad('COLOR', '', '', p[3])
-    #
-    #     elif p[1] == 'DRAW':
-    #         rightOperand = pop_pilaO()
-    #         rOP_type = pop_pType()
-    #         result_check = semantic_check('BOOL', rOP_type, '=')
-    #         add_quad('DRAW', '', '', rightOperand)
+    '''funcCall : funcCall1 funcCall2
+                | PR_calculaRegresion TO_PARABRE ID TO_CIERRA
+                | PR_prediceResultado TO_PARABRE ID TO_CIERRA
+                | PR_calculaModa TO_PARABRE ID TO_CIERRA
+                | PR_calculaMediana TO_PARABRE ID TO_CIERRA
+                | PR_calculaMedia TO_PARABRE ID TO_CIERRA
+                | PR_calculaPoisson TO_PARABRE ID TO_CIERRA
+                | PR_calculaBinomial TO_PARABRE ID TO_CIERRA
+                | PR_calculaNormal TO_PARABRE ID TO_CIERRA '''
+    add_quad(p[1], '', '', p[3])
+
 
 def p_write(p):
     '''write : PR_print TO_PARABRE superExp action TO_PARCIERRA '''
@@ -1420,6 +1411,14 @@ def maqVirtual():
             result = translateString(result)
             memoria[result] = leftval + dir_func[cosas[0]]['scope'][cosas[1]].get('address')
             currentQuad = currentQuad + 1
+        elif operation == 'calculaPoisson':
+            right = executeQuad.get('result')
+            f = open(right+".txt", "r")
+            par1 = f.readline()
+            par2 = f.readline()
+            s = np.random.poisson(int(par1), int(par2))
+            count, bins, ignored = plt.hist(s, 14, density=True)
+            plt.show()
         elif operation == 'PRINT':
             left = executeQuad.get('leftOperand')
             print("Console prints: " + str(retrieveValueAt(left)))
@@ -1536,7 +1535,7 @@ def maqVirtual():
 
 parser = yacc.yacc()
 
-fName = "fact_rec.txt"
+fName = "fact.txt"
 
 with open(fName, 'r') as myfile:
 	s = myfile.read().replace('\n', '')

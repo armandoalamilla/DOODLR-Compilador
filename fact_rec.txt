@@ -9,7 +9,8 @@ PROGRAM {
 		}
 		END
 	}
-	MAIN{
+
+	MAIN {
 		VAR INT res
 		res = fact(n:4)
 		PRINT(res)

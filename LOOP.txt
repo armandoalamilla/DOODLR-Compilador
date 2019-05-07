@@ -1,31 +1,6 @@
 PROGRAM{
 
-	VAR INT resultado2
 	MAIN{
-
-		resultado2 = 0
-
-		LOOP(3){
-
-			resultado2 = resultado2 + 1
-
-			IF(resultado2>20){
-				resultado2 = resultado2-5
-				#uwu
-			}
-
-			ELSE{
-
-				LOOP(2){
-					resultado2 = resultado2 * 2
-					#uwu
-				}
-				#uwu
-			}
-			#uwu
-		}
-		resultado2 = resultado2 + 5
-		#uwu
-
+	    calculaPoisson(pruepapois)
 	}
 }
