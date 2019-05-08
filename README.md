@@ -32,4 +32,38 @@ FUNC TIPO ID(parametros...)
 	END
 }
 
-***¿C
+una llamada se ve asi:
+
+ejemplo = algo(x:30,c:5,...	)
+
+***¿Como se hacen los if?***
+-Los if son parecidos a los de C/C++
+
+IF (A==B OR A<=B)
+{
+	codigo
+}
+ELSE {
+	codigo
+	END
+}
+
+***¿Como se hacen los ciclos?***
+
+LOOP(numero)
+{
+	codigo
+	END
+}
+
+***¿Como se gráfica y/o hace los calculos estadisticos?***
+Se editan los archivos (parametros) segun la función a usar y se pone cualquiera de estas funciones:
+calculaGamma(gamma)
+calculaMedia(media)
+calculaPoisson(pruebapois)
+calculaNormal(normal)
+calculaBinomial(binomial)
+calculaModa(moda)
+calculaMediana(mediana)
+
+
