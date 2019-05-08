@@ -2,18 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e5cbd9fa-9182-427e-8bdb-ba737a7dd477" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/binsearch.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fibbo_rec.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/find.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/multmat.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sort.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LOOP.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fact.txt" beforeDir="false" afterPath="$PROJECT_DIR$/fact.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fact_rec.txt" beforeDir="false" afterPath="$PROJECT_DIR$/fact_rec.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fibbo.txt" beforeDir="false" afterPath="$PROJECT_DIR$/fibbo.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mat.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scan_par.py" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/funcPred.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -23,10 +12,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DOODLR.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1237">
+            <state relative-caret-position="-1550">
               <caret line="1356" column="41" selection-start-line="1356" selection-start-column="41" selection-end-line="1356" selection-end-column="41" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
@@ -35,14 +24,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/normal.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/funcPred.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="13" column="28" lean-forward="true" selection-start-line="13" selection-start-column="28" selection-end-line="13" selection-end-column="28" />
-              <folding>
-                <element signature="e#0#31#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="136">
+              <caret line="8" column="11" lean-forward="true" selection-start-line="8" selection-start-column="11" selection-end-line="8" selection-end-column="11" />
             </state>
           </provider>
         </entry>
@@ -109,6 +95,7 @@
         <option value="$PROJECT_DIR$/binsearch.txt" />
         <option value="$PROJECT_DIR$/find.txt" />
         <option value="$PROJECT_DIR$/DOODLR.py" />
+        <option value="$PROJECT_DIR$/funcPred.txt" />
       </list>
     </option>
   </component>
@@ -251,13 +238,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fibbo.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="14" lean-forward="true" selection-start-line="2" selection-start-column="14" selection-end-line="2" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fibbo_rec.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -331,6 +311,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/DOODLR.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1550">
+          <caret line="1356" column="41" selection-start-line="1356" selection-start-column="41" selection-end-line="1356" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/normal.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -341,13 +331,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DOODLR.py">
+    <entry file="file://$PROJECT_DIR$/fibbo.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1237">
-          <caret line="1356" column="41" selection-start-line="1356" selection-start-column="41" selection-end-line="1356" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="187">
+          <caret line="11" lean-forward="true" selection-end-line="26" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/funcPred.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="11" lean-forward="true" selection-start-line="8" selection-start-column="11" selection-end-line="8" selection-end-column="11" />
         </state>
       </provider>
     </entry>

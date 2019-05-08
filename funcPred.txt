@@ -1,0 +1,12 @@
+PROGRAM{
+
+    MAIN {
+        calculaModa(moda)
+        calculaMedia(media)
+        calculaMediana(mediana)
+        calculaPoisson(pruebapois)
+        calculaNormal(normal)
+        END
+    }
+
+}
