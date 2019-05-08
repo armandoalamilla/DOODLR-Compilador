@@ -277,7 +277,6 @@ reserved = {
 
 
     'calculaRegresion': 'PR_calculaRegresion',
-    'prediceResultado': 'PR_prediceResultado',
     'calculaModa': 'PR_calculaModa',
     'calculaMediana': 'PR_calculaMediana',
     'calculaMedia': 'PR_calculaMedia',
@@ -852,15 +851,14 @@ def p_estructura(p):
 def p_funcCall(p):
     '''funcCall : funcCall1 funcCall2
                 | PR_calculaRegresion TO_PARABRE ID TO_PARCIERRA
-                | PR_prediceResultado TO_PARABRE ID TO_PARCIERRA
                 | PR_calculaModa TO_PARABRE ID TO_PARCIERRA
                 | PR_calculaMediana TO_PARABRE ID TO_PARCIERRA
                 | PR_calculaMedia TO_PARABRE ID TO_PARCIERRA
                 | PR_calculaPoisson TO_PARABRE ID TO_PARCIERRA
                 | PR_calculaBinomial TO_PARABRE ID TO_PARCIERRA
                 | PR_calculaNormal TO_PARABRE ID TO_PARCIERRA '''
-    if (p[1] == 'calculaRegresion' or p[1] == 'prediceResultado' or p[1] == 'calculaModa' or p[1] == 'calculaMediana' or p[1] == 'calculaMedia'
-            or p[1] == 'calculaPossion' or p[1] == 'calculaBinomial' or p[1] == 'calculaNormal'):
+    if (p[1] == 'calculaRegresion' or p[1] == 'calculaModa' or p[1] == 'calculaMediana' or p[1] == 'calculaMedia'
+            or p[1] == 'calculaPoisson' or p[1] == 'calculaBinomial' or p[1] == 'calculaNormal'):
         add_quad(p[1], '', '', p[3])
 
 # Regla de print
@@ -1297,11 +1295,6 @@ def maqVirtual():
             # Codigo correspondiente
 
             currentQuad = currentQuad + 1
-        elif operation == 'prediceResultado':
-            right = executeQuad.get('result')
-            # Codigo correspondiente
-
-            currentQuad = currentQuad + 1
         elif operation == 'calculaModa':
             right = executeQuad.get('result')
             f = open(right + ".txt", "r")
@@ -1335,6 +1328,7 @@ def maqVirtual():
             count, bins, ignored = plt.hist(s, 14, density=True)
             plt.show()
             f.close()
+            print("llega")
             currentQuad = currentQuad + 1
         elif operation == 'calculaBinomial':
             right = executeQuad.get('result')
@@ -1368,6 +1362,7 @@ def maqVirtual():
                     plt.show()
             else:
                 print("Media y la varianza mayores a 0.01")
+            print("llegue normal")
             currentQuad = currentQuad + 1
         elif operation == 'PRINT':
             left = executeQuad.get('leftOperand')
@@ -1496,7 +1491,9 @@ parser = yacc.yacc()
 
 #fName = "sort.txt"
 
-fName = "multmat.txt"
+#fName = "multmat.txt"
+
+fName = "funcPred.txt"
 
 
 with open(fName, 'r') as myfile:
