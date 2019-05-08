@@ -3,7 +3,7 @@ PROGRAM{
     MAIN {
 
         calculaNormal(normal)
-
+        calculaPoisson(pruebapois)
         END
     }
 
