@@ -1,0 +1,49 @@
+PROGRAM {
+
+    VAR INT myArr[10]
+
+	FUNC INT binsearch(INT key, INT bottom, INT top) {
+		IF(bottom > top) {
+			RET 0
+			END
+		}ELSE {
+			VAR INT mid
+			VAR INT pivot
+			mid = (top + bottom)/2
+			pivot = ARR myArr[mid]
+			IF(pivot == key) {
+				RET mid
+				END
+			}ELSE {
+				IF(key < pivot){
+					RET binsearch(key:key, bottom:bottom, top:mid-1)
+					END
+				}ELSE{
+					RET binsearch(key:key, bottom:mid+1, top:top)
+					END
+				}
+				END
+			}
+			END
+		}
+		END
+	}
+
+	MAIN {
+		VAR INT index
+		ARR myArr[1] = 3
+		ARR myArr[2] = 9
+		ARR myArr[3] = 7
+		ARR myArr[4] = 15
+		ARR myArr[5] = 30
+		ARR myArr[6] = 28
+		ARR myArr[7] = 42
+		ARR myArr[8] = 69
+		ARR myArr[9] = 10
+        ARR myArr[10] = 7
+
+        index = binsearch(key:3,bottom:1,top:10)
+        PRINT(index)
+        END
+	}
+}

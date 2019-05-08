@@ -1,0 +1,4 @@
+35
+.5
+10000
+Resultado de lanzar una moneda 35 veces, probado 10000 veces.

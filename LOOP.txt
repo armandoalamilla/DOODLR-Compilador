@@ -1,6 +1,0 @@
-PROGRAM{
-
-	MAIN{
-	    calculaPoisson(pruepapois)
-	}
-}

@@ -12,7 +12,7 @@ PROGRAM {
 
 	MAIN {
 		VAR INT res
-		res = fact(n:4)
+		res = fact(n:6)
 		PRINT(res)
 		END
 	}

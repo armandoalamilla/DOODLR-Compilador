@@ -1,8 +1,13 @@
 import ply.lex as lex
 import ply.yacc as yacc
 import sys
+
+# Librerias necesarias para el analalisis estadistico
 import matplotlib.pyplot as plt
 import numpy as np
+import statistics as st
+import matplotlib
+import matplotlib.colors
 
 # Inicializacion de diccionarios,variables y listas necesarias para el compilador
 aprobado = True
@@ -357,6 +362,11 @@ lexer = lex.lex()
 # Inicio de programa
 def p_prog(p):
     'prog : PR_program TO_LLAABRE declare mainBlock TO_LLACIERRA'
+    a = 0
+    # for q in quad:
+    #     print(a)
+    #     print(q)
+    #     a = a + 1
 
 # Definicion de regla de valor
 # En caso de que lo que se lea sea un arreglo, valida que exista la variable dimensionada, de ser asi
@@ -378,7 +388,8 @@ def p_val(p):
             dimensiones = dir_func['global']['scope'][arreglo.get('name')]['dim']
             varscope = 'global'
         else:
-            print("Error la variable no existe")
+            print("Error la variable  no existe")
+            print(arreglo)
             sys.exit()
         if arreglo.get('currentDim') != len(dimensiones) and len(dimensiones) != 1:
             print('Error, faltan dimensiones en el arreglo')
@@ -848,7 +859,9 @@ def p_funcCall(p):
                 | PR_calculaPoisson TO_PARABRE ID TO_PARCIERRA
                 | PR_calculaBinomial TO_PARABRE ID TO_PARCIERRA
                 | PR_calculaNormal TO_PARABRE ID TO_PARCIERRA '''
-    add_quad(p[1], '', '', p[3])
+    if (p[1] == 'calculaRegresion' or p[1] == 'prediceResultado' or p[1] == 'calculaModa' or p[1] == 'calculaMediana' or p[1] == 'calculaMedia'
+            or p[1] == 'calculaPossion' or p[1] == 'calculaBinomial' or p[1] == 'calculaNormal'):
+        add_quad(p[1], '', '', p[3])
 
 # Regla de print
 def p_write(p):
@@ -1284,25 +1297,34 @@ def maqVirtual():
             # Codigo correspondiente
 
             currentQuad = currentQuad + 1
-        elif operation == 'calculaResultado':
+        elif operation == 'prediceResultado':
             right = executeQuad.get('result')
             # Codigo correspondiente
 
             currentQuad = currentQuad + 1
         elif operation == 'calculaModa':
             right = executeQuad.get('result')
-            # Codigo correspondiente
-
+            f = open(right + ".txt", "r")
+            arr = f.read().split(',')
+            moda = st.mode(arr)
+            print("La moda es igual a " + str(moda))
+            f.close()
             currentQuad = currentQuad + 1
         elif operation == 'calculaMediana':
             right = executeQuad.get('result')
-            # Codigo correspondiente
-
+            f = open(right + ".txt", "r")
+            arr = f.read().split(',')
+            mediana = st.median(map(float, arr))
+            print("La mediana es igual a " + str(mediana))
+            f.close()
             currentQuad = currentQuad + 1
         elif operation == 'calculaMedia':
             right = executeQuad.get('result')
-            # Codigo correspondiente
-
+            f = open(right + ".txt", "r")
+            arr = f.read().split(',')
+            media = st.mean(map(float, arr))
+            print("La media es igual a " + str(media))
+            f.close()
             currentQuad = currentQuad + 1
         elif operation == 'calculaPoisson':
             right = executeQuad.get('result')
@@ -1312,16 +1334,40 @@ def maqVirtual():
             s = np.random.poisson(int(par1), int(par2))
             count, bins, ignored = plt.hist(s, 14, density=True)
             plt.show()
+            f.close()
             currentQuad = currentQuad + 1
         elif operation == 'calculaBinomial':
             right = executeQuad.get('result')
-            # Codigo correspondiente
-
+            f = open(right + ".txt", "r")
+            par1 = f.readline()
+            par2 = f.readline()
+            par3 = f.readline()
+            par4 = f.readline()
+            s = np.random.binomial(int(par1), float(par2), int(par3))
+            count, bins, ignored = plt.hist(s, 14, density=True, color='m')
+            plt.title(par4)
+            plt.show()
             currentQuad = currentQuad + 1
         elif operation == 'calculaNormal':
             right = executeQuad.get('result')
-            # Codigo correspondiente
-
+            f = open(right + ".txt", "r")
+            par1 = f.readline()  # mu
+            par2 = f.readline()  # desv est
+            par3 = f.readline()  # tamaño
+            par4 = f.readline()  # titulo
+            s = np.random.normal(float(par1), float(par2), int(par3))
+            # Verificae la media y la varianza:
+            bInt = abs(float(par1) - np.mean(s)) < 0.01
+            bInt2 = abs(float(par2) - np.std(s, ddof=1)) < 0.01
+            if bInt:
+                if bInt2:
+                    count, bins, ignored = plt.hist(s, 20, normed=True)
+                    plt.plot(bins, 1 / (float(par2) * np.sqrt(2 * np.pi)) * np.exp(
+                        - (bins - float(par1)) ** 2 / (2 * float(par2) ** 2)), linewidth=2, color='r')
+                    plt.title(par4)
+                    plt.show()
+            else:
+                print("Media y la varianza mayores a 0.01")
             currentQuad = currentQuad + 1
         elif operation == 'PRINT':
             left = executeQuad.get('leftOperand')
@@ -1439,7 +1485,19 @@ def maqVirtual():
 
 parser = yacc.yacc()
 
-fName = "fact.txt"
+#fName = "fact.txt"
+#fName = "fact_rec.txt"
+
+#fName = "fibbo.txt"
+#fName = "fibbo_rec.txt"
+
+#fName = "binsearch.txt"
+#fName = "find.txt"
+
+#fName = "sort.txt"
+
+fName = "multmat.txt"
+
 
 with open(fName, 'r') as myfile:
 	s = myfile.read().replace('\n', '')
@@ -1448,7 +1506,7 @@ parser.parse(s)
 maqVirtual()
 
 # print de memoria
-#for r in memoria:
+# for r in memoria:
 #    print(str(r) + ':' + str(memoria.get(r)))
 
 # print de directorio de funciones

@@ -1,0 +1,41 @@
+PROGRAM{
+    VAR INT myArr[10]
+
+	MAIN {
+		ARR myArr[1] = 2
+		ARR myArr[2] = 12
+		ARR myArr[3] = 3
+		ARR myArr[4] = 8
+		ARR myArr[5] = 1
+		ARR myArr[6] = 6
+
+		VAR INT a
+		VAR INT b
+		VAR INT aux
+
+		a = 1
+		LOOP(6){
+			b = a + 1
+			LOOP(6-a){
+				IF(ARR myArr[a] > ARR myArr[b]){
+					aux = ARR myArr[a]
+					ARR myArr[a] = ARR myArr[b]
+					ARR myArr[b] = aux
+					END
+				}
+				 b = b + 1
+				 END
+			}
+			a = a + 1
+			END
+		}
+
+		a = 1
+		LOOP(6){
+		    PRINT(ARR myArr[a])
+		    a = a + 1
+			END
+		}
+		END
+	}
+}

@@ -1,0 +1,31 @@
+PROGRAM{
+	FUNC INT fibbo(INT n){
+		IF(n==0){
+			RET 0
+			END
+		}ELSE {
+			IF(n==1){
+				RET 1
+				END
+			}ELSE {
+				VAR INT t1
+				VAR INT t2
+
+				t1 = fibbo(n:n-1)
+				t2 = fibbo(n:n-2)
+				VAR INT res
+				RET  t1 + t2
+				END
+			}
+			END
+		}
+		END
+	}
+
+	MAIN{
+	    VAR INT res
+	    res = fibbo(n:6)
+	    PRINT(res)
+		END
+	}
+}
