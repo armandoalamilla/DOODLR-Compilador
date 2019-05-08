@@ -24,7 +24,7 @@ PROGRAM{
 
 	MAIN{
 	    VAR INT res
-	    res = fibbo(n:6)
+	    res = fibbo(n:12)
 	    PRINT(res)
 		END
 	}

@@ -1,0 +1,19 @@
+PROGRAM {
+    VAR INT val1
+    VAR INT val2
+
+    FUNC INT suma(INT i, INT j) {
+
+        RET i+j
+        END
+
+    }
+
+    MAIN {
+        val1 = 2
+        val2 = 4
+        PRINT(suma(i:val1, j:val2))
+        END
+    }
+
+}

@@ -1,6 +1,7 @@
 PROGRAM{
 	VAR INT matriz1[2,3]
 	VAR INT matriz2[3,4]
+
 	VAR INT resultado[2,4]
 
 	MAIN{
@@ -98,3 +99,7 @@ PROGRAM{
 
 	}
 }
+
+
+
+

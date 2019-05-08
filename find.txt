@@ -17,7 +17,7 @@ PROGRAM {
         exists = FALSE
 
         VAR INT n
-        n = 9
+        n = 244
 
         VAR INT i
         i = 1

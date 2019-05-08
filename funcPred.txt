@@ -1,9 +1,13 @@
 PROGRAM{
 
     MAIN {
-
-        calculaNormal(normal)
+        calculaGamma(gamma)
         calculaPoisson(pruebapois)
+        calculaNormal(normal)
+        calculaBinomial(binomial)
+        calculaMedia(media)
+        calculaModa(moda)
+        calculaMediana(mediana)
         END
     }
 

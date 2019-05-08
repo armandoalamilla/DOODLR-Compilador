@@ -1,5 +1,5 @@
 PROGRAM{
-    VAR INT myArr[10]
+    VAR INT myArr[6]
 
 	MAIN {
 		ARR myArr[1] = 2

@@ -8,6 +8,8 @@ import numpy as np
 import statistics as st
 import matplotlib
 import matplotlib.colors
+import scipy.special as sps
+
 
 # Inicializacion de diccionarios,variables y listas necesarias para el compilador
 aprobado = True
@@ -1363,8 +1365,17 @@ def maqVirtual():
         elif operation == 'calculaGamma':
             right = executeQuad.get('result')
             f = open(right + ".txt", "r")
-
-
+            par1 = f.readline()
+            par2 = f.readline()
+            par3 = f.readline()
+            # se mueve la forma y la escala y las repeticiones
+            # los valores son aleatorios para fines educativos.
+            s = np.random.gamma(float(par1), float(par2), int(par3))
+            count, bins, ignored = plt.hist(s, 50, density=True)
+            y = bins ** (float(par1) - 1) * (np.exp(-bins / float(par2)) / (sps.gamma(float(par1)) * float(par2) ** float(par1)))
+            plt.plot(bins, y, linewidth=2, color='r')
+            plt.title("Distribución gamma con forma " + par1 + " y escala " + par2)
+            plt.show()
             f.close()
             currentQuad = currentQuad + 1
         elif operation == 'PRINT':
@@ -1483,7 +1494,7 @@ def maqVirtual():
 
 parser = yacc.yacc()
 
-#fName = "fact.txt"
+fName = "fact.txt"
 #fName = "fact_rec.txt"
 
 #fName = "fibbo.txt"
@@ -1491,12 +1502,13 @@ parser = yacc.yacc()
 
 #fName = "binsearch.txt"
 #fName = "find.txt"
-
 #fName = "sort.txt"
 
 #fName = "multmat.txt"
 
-fName = "funcPred.txt"
+#fName = "funcPred.txt"
+
+#fName = "archivodemo.txt"
 
 
 with open(fName, 'r') as myfile:
@@ -1507,19 +1519,19 @@ maqVirtual()
 
 # print de memoria
 # for r in memoria:
-#    print(str(r) + ':' + str(memoria.get(r)))
+#   print(str(r) + ':' + str(memoria.get(r)))
 
 # print de directorio de funciones
-#print(dir_func)
+# print(dir_func)
 
 # Code to display all found tokens ######
 # lexer.input(s)
 # print("List of Tokens: ")
 # while True:
-#    tok = lexer.token()
-#    if not tok:
-#        break
-#    print(tok)
+#   tok = lexer.token()
+#   if not tok:
+#       break
+#   print(tok)
 
 if aprobado == True:
     print("Archivo aprobado")
